@@ -13,18 +13,18 @@ class GameplayState extends GameState {
     var fWidth = 600;
 
     override public function update(t:Float):Void {
-        godModel.clouds.update(dt);
 
         var p = godModel.player;
         var i = godModel.input;
 
-        p.vx = Mathu.clamp(p.vx + i.getDirProjection(horizontal) * acc * dt, -maxSpd, maxSpd);
-        p.x = Mathu.clamp(p.x + p.vx * dt, -fWidth / 2, fWidth / 2);
+        p.speed.x = Mathu.clamp(p.speed.x + i.getDirProjection(horizontal) * acc * dt, -maxSpd, maxSpd);
+        p.pos.x = Mathu.clamp(p.pos.x + p.speed.x * dt, -fWidth / 2, fWidth / 2);
 
         var v = godModel.view.player;
-        v.x = p.x;
-        v.y = p.y;
+        v.x = p.pos.x;
+        v.y = p.pos.y;
         handleBullet(godModel.bullet, godModel.view.bullet);
+        godModel.clouds.update(dt);
     }
 
 
@@ -32,25 +32,25 @@ class GameplayState extends GameState {
         var p = godModel.player;
         var i = godModel.input;
         if (p.bullet == b) { // bullet is carried by player
-            b.x = p.x;
-            b.y = p.y - 10;
+            b.pos.x = p.pos.x;
+            b.pos.y = p.pos.y - 10;
             if (i.pressed(GameButtons.jump)) lauch(b);
         } else if (false) { // handle player hit
 
-        } else if (b.y < godModel.baseline - 1) { // handle ballistics
-            b.x += b.vx * dt;
-            if (Math.abs(b.x) > fWidth / 2) {
-                b.x = Mathu.clamp(b.x, -fWidth / 2, fWidth / 2);
-                b.vx *= -1;
+        } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
+            b.pos.x += b.speed.x * dt;
+            if (Math.abs(b.pos.x) > fWidth / 2) {
+                b.pos.x = Mathu.clamp(b.pos.x, -fWidth / 2, fWidth / 2);
+                b.speed.x *= -1;
             }
-            b.vy += godModel.gravity * dt;
-            b.y += b.vy * dt;
-            if (b.y > godModel.baseline) b.y = godModel.baseline;
+            b.speed.y += godModel.gravity * dt;
+            b.pos.y += b.speed.y * dt;
+            if (b.pos.y > godModel.baseline) b.pos.y = godModel.baseline;
         } else { // idle
-            if (Math.abs(b.x - p.x) < (b.r + p.r)) pick(b); // check dist and pick
+            if (Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) pick(b); // check dist and pick
         }
-        v.x = b.x;
-        v.y = b.y;
+        v.x = b.pos.x;
+        v.y = b.pos.y;
     }
 
     function pick(b:Bullet) {
@@ -64,8 +64,8 @@ class GameplayState extends GameState {
         var p = godModel.player;
         if (p.bullet != b) {throw "wrong";}
         p.bullet = null;
-        b.vx = p.vx * 2.4;
-        b.vy = -600;
+        b.speed.x = p.speed.x * 2.4;
+        b.speed.y = -600;
     }
 
     override public function onEnter():Void {

@@ -56,4 +56,9 @@ class Pos {
     public var y:Float = 0;
 
     public function new() {}
+
+    public function reset() {
+        x = 0;
+        y = 0;
+    }
 }

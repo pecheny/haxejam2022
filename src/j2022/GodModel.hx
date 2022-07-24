@@ -36,9 +36,9 @@ class GodModel {
 
     public function reset() {
         player.reset();
-        player.x = baseline;
+        player.pos.x = baseline;
         bullet.reset();
-        bullet.x = baseline;
+        bullet.pos.x = baseline;
         view.reset();
     }
 }
@@ -65,6 +65,7 @@ class Clouds implements Updatable {
         }
         for (c in clouds) {
             c.update(dt);
+//            if ()
         }
     }
 }
@@ -77,10 +78,12 @@ class Player extends GameObj {
 }
 class GameObj {
     public var color:Int = 0;
-    public var x:Float;
-    public var y:Float;
-    public var vx:Float;
-    public var vy:Float;
+    public var pos = new Pos();
+    public var speed = new Pos();
+//    public var x:Float;
+//    public var y:Float;
+//    public var vx:Float;
+//    public var vy:Float;
     public var r:Float = 16;
 
     public function new() {
@@ -88,9 +91,7 @@ class GameObj {
     }
 
     public function reset() {
-        x = 0;
-        y = 0;
-        vx = 0;
-        vy = 0;
+        pos.reset();
+        speed.reset();
     }
 }
