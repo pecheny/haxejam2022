@@ -5,8 +5,10 @@ import fsm.State;
 import j2022.CloudMove;
 class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
-    public var x:Float = 0;
-    public var y:Float = 0;
+    public var pos = new Pos();
+
+//    public var x:Float = 0;
+//    public var y:Float = 0;
     public var r:Float = 36;
 
     public var offsets:Map<CloudMoveSystem, Pos> = new Map();
@@ -30,8 +32,8 @@ class Cloud extends FSM<CloudStates, Cloud> {
             _y += o.y;
         }
 
-        x = (x + _x) / 2;
-        y = (y + _y) / 2;
+        pos.x = (pos.x + _x) / 2;
+        pos.y = (pos.y + _y) / 2;
         super.update(t);
     }
 
@@ -93,7 +95,7 @@ class CloudView extends Sprite {
     public function drawActive() {
         graphics.clear();
         graphics.beginFill(color, 1);
-        graphics.drawCircle(cloud.x, cloud.y, cloud.r);
+        graphics.drawCircle(cloud.pos.x, cloud.pos.y, cloud.r);
         graphics.endFill();
     }
 
@@ -101,8 +103,8 @@ class CloudView extends Sprite {
         graphics.clear();
         for (i in 0...angles.length) {
             var r = spreadRange.transfomrValue(t);
-            var x = cloud.x + Math.cos(angles[i]) * r;
-            var y = cloud.y + Math.sin(angles[i]) * r;
+            var x = cloud.pos.x + Math.cos(angles[i]) * r;
+            var y = cloud.pos.y + Math.sin(angles[i]) * r;
             graphics.beginFill(color, alphaRange.transfomrValue(t));
             graphics.drawCircle(x, y, sizeRange.transfomrValue(t));
             graphics.endFill();

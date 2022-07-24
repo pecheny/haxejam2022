@@ -65,7 +65,7 @@ class Clouds implements Updatable {
         }
         for (c in clouds) {
             c.update(dt);
-//            if ()
+//            if (c.pos)
         }
     }
 }
