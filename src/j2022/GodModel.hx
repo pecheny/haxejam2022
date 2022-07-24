@@ -6,13 +6,14 @@ import input.KeyboardInput;
 import input.MetaInput;
 import utils.KeyPoll;
 import input.Input;
+import j2022.CloudMove;
 class GodModel {
     public var view:GameView;
     public var player:Player;
     public var bullet:Bullet;
     public var input:Input;
     public var baseline:Float;
-    public var gravity = 100;
+    public var gravity = 400;
     public var clouds:Clouds;
 
     public function new() {
@@ -44,17 +45,27 @@ class GodModel {
 
 class Clouds implements Updatable {
     public var clouds = new Array<Cloud>();
+    var moveSystems = new Array<CloudMoveSystem>();
 
     public function new() {
-        for (i in 0...1) {
-            clouds.push(new Cloud());
-            clouds[i].y = -100;
+        var round = new RoundCloudMoveSystem();
+        round.center.y = -350;
+        moveSystems.push(round);
+        for (i in 0...4) {
+            var c = new Cloud();
+            clouds.push(c);
+            round.add(c);
+//            clouds[i].y = -100;
         }
     }
 
     public function update(dt:Float):Void {
-        for (c in clouds)
+        for (s in moveSystems) {
+            s.update(dt);
+        }
+        for (c in clouds) {
             c.update(dt);
+        }
     }
 }
 

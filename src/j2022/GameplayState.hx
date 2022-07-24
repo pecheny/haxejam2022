@@ -9,7 +9,7 @@ class GameplayState extends GameState {
     var godModel:GodModel;
     var dt = 1 / 60;
     var maxSpd = 100;
-    var acc = 100;
+    var acc = 200;
     var fWidth = 600;
 
     override public function update(t:Float):Void {
@@ -38,8 +38,6 @@ class GameplayState extends GameState {
         } else if (false) { // handle player hit
 
         } else if (b.y < godModel.baseline - 1) { // handle ballistics
-
-            trace(b.y  + " " + godModel.baseline);
             b.x += b.vx * dt;
             if (Math.abs(b.x) > fWidth / 2) {
                 b.x = Mathu.clamp(b.x, -fWidth / 2, fWidth / 2);
@@ -49,7 +47,6 @@ class GameplayState extends GameState {
             b.y += b.vy * dt;
             if (b.y > godModel.baseline) b.y = godModel.baseline;
         } else { // idle
-            trace(b.y);
             if (Math.abs(b.x - p.x) < (b.r + p.r)) pick(b); // check dist and pick
         }
         v.x = b.x;
@@ -67,8 +64,8 @@ class GameplayState extends GameState {
         var p = godModel.player;
         if (p.bullet != b) {throw "wrong";}
         p.bullet = null;
-        b.vx = p.vx;
-        b.vy = -300;
+        b.vx = p.vx * 2.4;
+        b.vy = -600;
     }
 
     override public function onEnter():Void {

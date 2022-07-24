@@ -2,11 +2,14 @@ package j2022;
 import openfl.display.Sprite;
 import fsm.FSM;
 import fsm.State;
+import j2022.CloudMove;
 class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
     public var x:Float = 0;
     public var y:Float = 0;
     public var r:Float = 36;
+
+    public var offsets:Map<CloudMoveSystem, Pos> = new Map();
 
 
     public function new() {
@@ -15,8 +18,24 @@ class Cloud extends FSM<CloudStates, Cloud> {
         addState(inactive, new InactiveState());
         addState(active, new ActiveState());
         addState(disappearing, new DisappearState());
-        changeState(disappearing);
+        changeState(active);
     }
+
+    override public function update(t:Float) {
+        var _x = 0.;
+        var _y = 0.;
+        for (k in offsets.keys()) {
+            var o = offsets[k];
+            _x += o.x;
+            _y += o.y;
+        }
+
+        x = (x + _x) / 2;
+        y = (y + _y) / 2;
+        super.update(t);
+    }
+
+
 }
 
 class DisappearState extends CloudState {
@@ -26,8 +45,8 @@ class DisappearState extends CloudState {
     override public function update(dt:Float):Void {
         t += dt;
         if (t >= dur) {
-//            fsm.changeState(inactive);
-            fsm.forceChangeState(disappearing);
+            fsm.changeState(inactive);
+//            fsm.forceChangeState(disappearing);
             return;
         }
         fsm.view.drawDisappear(t / dur);
@@ -35,6 +54,9 @@ class DisappearState extends CloudState {
 
     override public function onEnter():Void {
         t = 0;
+        var ms = fsm.offsets.keys();
+        for (k in ms)
+            k.remove(fsm);
     }
 }
 class InactiveState extends CloudState {
@@ -48,7 +70,7 @@ class InactiveState extends CloudState {
 }
 class ActiveState extends CloudState {
 
-    override public function onEnter():Void {
+    override public function update(_):Void {
         fsm.view.drawActive();
     }
 }
@@ -70,7 +92,9 @@ class CloudView extends Sprite {
 
     public function drawActive() {
         graphics.clear();
+        graphics.beginFill(color, 1);
         graphics.drawCircle(cloud.x, cloud.y, cloud.r);
+        graphics.endFill();
     }
 
     public function drawDisappear(t:Float) {
