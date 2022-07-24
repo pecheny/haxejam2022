@@ -13,6 +13,8 @@ class GameplayState extends GameState {
     var fWidth = 600;
 
     override public function update(t:Float):Void {
+        godModel.clouds.update(dt);
+
         var p = godModel.player;
         var i = godModel.input;
 

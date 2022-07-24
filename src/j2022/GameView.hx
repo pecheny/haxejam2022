@@ -12,6 +12,9 @@ class GameView extends Sprite {
         addChild(player);
         bullet = new PlayerView(m.bullet);
         addChild(bullet);
+
+        for (c in m.clouds.clouds)
+            addChild(c.view);
     }
 
     public function reset() {
