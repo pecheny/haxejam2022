@@ -1,9 +1,19 @@
 package j2022;
 import utils.AbstractEngine;
+import j2022.GameFsm;
 class Main extends AbstractEngine {
+    var fsm : GameFsm;
     public function new() {
         super();
-        graphics.beginFill(0);
-        graphics.drawRect(0,0,100,100);
+        var m = new GodModel();
+        fsm = new GameFsm(m);
+        fsm.changeState(GameStates.GAMEPLAY);
     }
+
+    override public function update(t:Float):Void {
+        super.update(t);
+        fsm.update(t);
+    }
+
+
 }
