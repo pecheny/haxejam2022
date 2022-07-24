@@ -24,16 +24,7 @@ class Cloud extends FSM<CloudStates, Cloud> {
     }
 
     override public function update(t:Float) {
-        var _x = 0.;
-        var _y = 0.;
-        for (k in offsets.keys()) {
-            var o = offsets[k];
-            _x += o.x;
-            _y += o.y;
-        }
 
-        pos.x = (pos.x + _x) / 2;
-        pos.y = (pos.y + _y) / 2;
         super.update(t);
     }
 
@@ -73,6 +64,16 @@ class InactiveState extends CloudState {
 class ActiveState extends CloudState {
 
     override public function update(_):Void {
+        var _x = 0.;
+        var _y = 0.;
+        for (k in fsm.offsets.keys()) {
+            var o = fsm.offsets[k];
+            _x += o.x;
+            _y += o.y;
+        }
+
+        fsm.pos.x = (fsm.pos.x + _x) / 2;
+        fsm.pos.y = (fsm.pos.y + _y) / 2;
         fsm.view.drawActive();
     }
 }

@@ -1,4 +1,5 @@
 package j2022;
+import j2022.Cloud.CloudStates;
 import utils.Updatable;
 import input.GamepadInput;
 import flash.ui.Keyboard;
@@ -19,7 +20,7 @@ class GodModel {
     public function new() {
         player = new Player();
         bullet = new Bullet();
-        clouds = new Clouds();
+        clouds = new Clouds(this);
         view = new GameView(this);
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;
         var keys = new KeyPoll(openfl.Lib.current.stage);
@@ -41,13 +42,19 @@ class GodModel {
         bullet.pos.x = baseline;
         view.reset();
     }
+
+    public function hitTHeCloud(c:Cloud) {
+        c.changeState(CloudStates.disappearing);
+    }
 }
 
 class Clouds implements Updatable {
     public var clouds = new Array<Cloud>();
     var moveSystems = new Array<CloudMoveSystem>();
+    var model:GodModel;
 
-    public function new() {
+    public function new(m) {
+        model = m;
         var round = new RoundCloudMoveSystem();
         round.center.y = -350;
         moveSystems.push(round);
@@ -63,9 +70,16 @@ class Clouds implements Updatable {
         for (s in moveSystems) {
             s.update(dt);
         }
+
         for (c in clouds) {
+            if (c.currentStateName == inactive)
+                continue;
             c.update(dt);
-//            if (c.pos)
+            var b = model.bullet;
+            var sthld = (c.r + b.r) * (c.r + b.r);
+            if (c.pos.distSq(b.pos) < sthld) {
+                model.hitTHeCloud(c);
+            }
         }
     }
 }

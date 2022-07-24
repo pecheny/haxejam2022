@@ -61,4 +61,9 @@ class Pos {
         x = 0;
         y = 0;
     }
+
+    public inline function distSq(o:Pos) {
+        return (o.x - x) * (o.x - x)
+            + (o.y - y) * (o.y - y);
+    }
 }
