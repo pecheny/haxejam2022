@@ -47,9 +47,6 @@ class DisappearState extends CloudState {
 
     override public function onEnter():Void {
         t = 0;
-        var ms = fsm.offsets.keys();
-        for (k in ms)
-            k.remove(fsm);
     }
 }
 class InactiveState extends CloudState {
@@ -58,6 +55,9 @@ class InactiveState extends CloudState {
     }
 
     override public function onEnter():Void {
+        var ms = fsm.offsets.keys();
+        for (k in ms)
+            k.remove(fsm);
         fsm.view.visible = false;
     }
 }
