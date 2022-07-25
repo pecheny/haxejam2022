@@ -119,4 +119,13 @@ class Pos {
         return (o.x - x) * (o.x - x)
         + (o.y - y) * (o.y - y);
     }
+
+    public inline function normalize(length:Float = 1) {
+        if (x != 0. || y != 0.) {
+            var norm=  length / Math.sqrt(x * x + y * y);
+            x *= norm;
+            y *= norm;
+        }
+        return cast this;
+    }
 }

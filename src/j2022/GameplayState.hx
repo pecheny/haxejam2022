@@ -48,8 +48,16 @@ class GameplayState extends GameState {
             b.pos.y = p.pos.y - 10;
             if (i.pressed(GameButtons.jump)) lauch(b);
         } else if (dst < thld && b.speed.y > 0) { // handle player hit
-            b.speed.x *= -1;
-            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
+            // ===  speed reverse
+//            b.speed.x *= -1;
+//            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
+
+            // === axis of centers
+            var magn = Math.sqrt(b.speed.magnSq());
+            b.speed.x = b.pos.x - p.pos.x;
+            b.speed.y = b.pos.y - p.pos.y;
+            b.speed.normalize(magn);
+
         } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
             b.pos.x += b.speed.x * dt;
             if (Math.abs(b.pos.x) > fWidth / 2) {
