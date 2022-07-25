@@ -44,6 +44,7 @@ class GodModel {
         bullet.reset();
         bullet.pos.x = baseline;
         view.reset();
+        GlobalTime.reset();
     }
 
     public function hitTHeCloud(c:Cloud) {
@@ -99,7 +100,7 @@ class CloudSpawner {
     var nextTick = 0;
     var clouds:Clouds;
     var randomInitializer = [];
-    var max = 6;
+    var max = 26;
 
     public function new(c) {
         clouds = c;
