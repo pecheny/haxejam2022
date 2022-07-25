@@ -9,8 +9,10 @@ class GameplayState extends GameState {
     var godModel:GodModel;
     var dt = 1 / 60;
     var maxSpd = 200;
+    var maxBVertSpd = 1600;
     var acc = 500;
     var fWidth = 600;
+    var fHeight = 800;
 
     override public function update(t:Float):Void {
         GlobalTime.time += dt;
@@ -39,12 +41,15 @@ class GameplayState extends GameState {
     function handleBullet(b:Bullet, v:PlayerView) {
         var p = godModel.player;
         var i = godModel.input;
+        var thld = ( p.r + b.r ) * ( p.r + b.r );
+        var dst = p.pos.distSq(b.pos);
         if (p.bullet == b) { // bullet is carried by player
             b.pos.x = p.pos.x;
             b.pos.y = p.pos.y - 10;
             if (i.pressed(GameButtons.jump)) lauch(b);
-        } else if (false) { // handle player hit
-
+        } else if (dst < thld && b.speed.y > 0) { // handle player hit
+            b.speed.x *= -1;
+            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
         } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
             b.pos.x += b.speed.x * dt;
             if (Math.abs(b.pos.x) > fWidth / 2) {
@@ -53,6 +58,8 @@ class GameplayState extends GameState {
             }
             b.speed.y += godModel.gravity * dt;
             b.pos.y += b.speed.y * dt;
+            if (b.pos.y < -fHeight && b.speed.y < 0) // hit with ceil
+                b.speed.y *= -1;
             if (b.pos.y > godModel.baseline) b.pos.y = godModel.baseline;
         } else { // idle
             if (Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) pick(b); // check dist and pick
