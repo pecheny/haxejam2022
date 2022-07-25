@@ -18,7 +18,8 @@ class GameplayState extends GameState {
         GlobalTime.time += dt;
         GlobalTime.tick ++;
 
-        handlePlayer();
+        handlePlayerSimple();
+//        handlePlayer();
         handleBullet(godModel.bullet, godModel.view.bullet);
         godModel.clouds.update(dt);
         godModel.cloudSpawner.update(dt);
@@ -29,6 +30,20 @@ class GameplayState extends GameState {
         var i = godModel.input;
         p.speed.x = Mathu.clamp(p.speed.x + i.getDirProjection(horizontal) * acc * dt, -maxSpd, maxSpd);
         p.pos.x = Mathu.clamp(p.pos.x + p.speed.x * dt, -fWidth / 2, fWidth / 2);
+        if (Math.abs(p.pos.x) > (fWidth / 2 - 1)) {
+            p.speed.x = 0;
+        }
+        var v = godModel.view.player;
+        v.x = p.pos.x;
+        v.y = p.pos.y;
+    }
+
+    function handlePlayerSimple() {
+        var p = godModel.player;
+        var i = godModel.input;
+        p.speed.x = i.getDirProjection(horizontal) * 200;
+        p.pos.x = Mathu.clamp(p.pos.x + dt * p.speed.x, -fWidth / 2, fWidth / 2);
+
         if (Math.abs(p.pos.x) > (fWidth / 2 - 1)) {
             p.speed.x = 0;
         }
