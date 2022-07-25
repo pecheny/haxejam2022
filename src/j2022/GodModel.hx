@@ -154,9 +154,17 @@ class GlobalTime {
 
 
 class Bullet extends GameObj {
+    public function new () {
+        super();
+        color = 0xb08080;
+    }
 }
 class Player extends GameObj {
     public var bullet:Bullet;
+    public function new () {
+        super();
+        color = 0xa0a0a0;
+    }
 }
 class GameObj {
     public var color:Int = 0;
