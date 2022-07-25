@@ -8,11 +8,13 @@ import utils.Mathu;
 class GameplayState extends GameState {
     var godModel:GodModel;
     var dt = 1 / 60;
-    var maxSpd = 100;
-    var acc = 200;
+    var maxSpd = 200;
+    var acc = 300;
     var fWidth = 600;
 
     override public function update(t:Float):Void {
+        GlobalTime.time += dt;
+        GlobalTime.tick ++;
 
         var p = godModel.player;
         var i = godModel.input;
@@ -25,6 +27,7 @@ class GameplayState extends GameState {
         v.y = p.pos.y;
         handleBullet(godModel.bullet, godModel.view.bullet);
         godModel.clouds.update(dt);
+        godModel.cloudSpawner.update(dt);
     }
 
 

@@ -16,12 +16,15 @@ class GodModel {
     public var baseline:Float;
     public var gravity = 400;
     public var clouds:Clouds;
+    public var cloudSpawner:CloudSpawner;
 
     public function new() {
         player = new Player();
         bullet = new Bullet();
         clouds = new Clouds(this);
+        cloudSpawner = new CloudSpawner(clouds);
         view = new GameView(this);
+
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;
         var keys = new KeyPoll(openfl.Lib.current.stage);
         input = new MetaInput().add(
@@ -50,7 +53,7 @@ class GodModel {
 
 class Clouds implements Updatable {
     public var clouds = new Array<Cloud>();
-    var moveSystems = new Array<CloudMoveSystem>();
+    public var moveSystems = new Array<CloudMoveSystem>();
     var model:GodModel;
 
     public function new(m) {
@@ -58,12 +61,18 @@ class Clouds implements Updatable {
         var round = new RoundCloudMoveSystem();
         round.center.y = -350;
         moveSystems.push(round);
-        for (i in 0...4) {
-            var c = new Cloud();
-            clouds.push(c);
-            round.add(c);
-//            clouds[i].y = -100;
-        }
+
+        var dizzy = new DizzyMove();
+        moveSystems.push(dizzy);
+
+    }
+
+    public function createCloud() {
+        var c = new Cloud(model);
+        clouds.push(c);
+        model.view.addChild(c.view);
+        trace("total " + clouds.length);
+        return c;
     }
 
     public function update(dt:Float):Void {
@@ -81,6 +90,65 @@ class Clouds implements Updatable {
                 model.hitTHeCloud(c);
             }
         }
+    }
+}
+
+class CloudSpawner {
+    public var inactiveClouds = [];
+    var cooldown = 120;
+    var nextTick = 0;
+    var clouds:Clouds;
+    var randomInitializer = [];
+    var max = 6;
+
+    public function new(c) {
+        clouds = c;
+        randomInitializer.push((c:Cloud) -> {
+            c.r = 16;
+            clouds.moveSystems[0].add(c);
+            clouds.moveSystems[1].add(c);
+        });
+
+
+//        randomInitializer.push((c:Cloud) -> {
+//            c.r = 32;
+//            clouds.moveSystems[0].add(c);
+//        });
+    }
+
+    public function update(dt) {
+        var activeCount = clouds.clouds.length - inactiveClouds.length;
+        if (GlobalTime.tick > nextTick && activeCount < max)
+            spawn();
+    }
+
+    function rndInit(c) {
+        var i = Math.floor(Math.random() * (randomInitializer.length ));
+        randomInitializer[i](c);
+    }
+
+    function spawn() {
+        var c =
+        if (inactiveClouds.length < 1) {
+            clouds.createCloud();
+        } else inactiveClouds.pop();
+
+        rndInit(c);
+        c.changeState(active);
+        nextTick += cooldown;
+
+    }
+
+
+}
+
+class GlobalTime {
+    public static var time:Float;
+    public static var tick:Int;
+
+    public static function reset() {
+        time = 0;
+        tick = 0;
     }
 }
 

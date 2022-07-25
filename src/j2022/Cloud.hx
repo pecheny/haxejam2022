@@ -5,6 +5,7 @@ import fsm.State;
 import j2022.CloudMove;
 class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
+    public var model:GodModel;
     public var pos = new Pos();
 
 //    public var x:Float = 0;
@@ -14,8 +15,9 @@ class Cloud extends FSM<CloudStates, Cloud> {
     public var offsets:Map<CloudMoveSystem, Pos> = new Map();
 
 
-    public function new() {
+    public function new(m) {
         super();
+        this.model = m;
         view = new CloudView(this);
         addState(inactive, new InactiveState());
         addState(active, new ActiveState());
@@ -59,6 +61,7 @@ class InactiveState extends CloudState {
         for (k in ms)
             k.remove(fsm);
         fsm.view.visible = false;
+        fsm.model.cloudSpawner.inactiveClouds.push(fsm);
     }
 }
 class ActiveState extends CloudState {
