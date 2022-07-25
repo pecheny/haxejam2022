@@ -164,6 +164,7 @@ class Player extends GameObj {
     public function new () {
         super();
         color = 0xa0a0a0;
+        r = 24;
     }
 }
 class GameObj {
