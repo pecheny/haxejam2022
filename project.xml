@@ -18,7 +18,7 @@
     <haxedef name = "openfl_always_render" value = "true" />
 
     <haxedef name = "HXCPP_DEBUGGER"  />
-
+    <library path="Assets/j2022.swf" preload="true" generate="true"  />
     <assets path="Assets" include="*"/>
 
 </project>

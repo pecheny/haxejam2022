@@ -1,5 +1,6 @@
 package fsm;
 
+import openfl.events.MouseEvent;
 class State<TStates:String, TFSM:FSM<TStates, TFSM>> {
     public var fsm:TFSM;
 
@@ -15,4 +16,5 @@ class State<TStates:String, TFSM:FSM<TStates, TFSM>> {
 
     }
 
+    public function mouseDownHandler(e:MouseEvent):Void {}
 }
