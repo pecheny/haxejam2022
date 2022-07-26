@@ -18,6 +18,9 @@ class GodModel {
     public var clouds:Clouds;
     public var cloudSpawner:CloudSpawner;
 
+    public var fWidth = 600;
+    public var fHeight = 800;
+
     public function new() {
         player = new Player();
         bullet = new Bullet();
@@ -66,6 +69,15 @@ class Clouds implements Updatable {
         var dizzy = new DizzyMove();
         moveSystems.push(dizzy);
 
+        var pong = new PongMoveSystem();
+        pong.bounds = {
+            l:-model.fWidth / 2,
+            r:model.fWidth / 2,
+            b:0,
+            t:-model.fHeight,
+        }
+        moveSystems.push(pong);
+
     }
 
     public function createCloud() {
@@ -105,11 +117,24 @@ class CloudSpawner {
     public function new(c) {
         clouds = c;
         randomInitializer.push((c:Cloud) -> {
-            c.r = 16;
+            c.r = 32;
             clouds.moveSystems[0].add(c);
             clouds.moveSystems[1].add(c);
         });
 
+        randomInitializer.push((c:Cloud) -> {
+            c.r = 32;
+            var w = 500;
+
+            var pong = clouds.moveSystems[2];
+            pong.add(c);
+            var pv = c.offsets[pong];
+
+            pv.x = Math.random() * w - w / 2;
+            pv.y = - Math.random() * 300  - 100;
+            pv.vel.x = Math.random() * 100;
+            pv.vel.y = Math.random() * 100;
+        });
 
 //        randomInitializer.push((c:Cloud) -> {
 //            c.r = 32;
@@ -143,6 +168,14 @@ class CloudSpawner {
 
 }
 
+
+typedef Bounds = {
+        l:Float,
+        r:Float,
+        t:Float,
+        b:Float,
+}
+
 class GlobalTime {
     public static var time:Float;
     public static var tick:Int;
@@ -155,14 +188,16 @@ class GlobalTime {
 
 
 class Bullet extends GameObj {
-    public function new () {
+    public function new() {
         super();
         color = 0xb08080;
+        r = 8;
     }
 }
 class Player extends GameObj {
     public var bullet:Bullet;
-    public function new () {
+
+    public function new() {
         super();
         color = 0xa0a0a0;
         r = 24;

@@ -11,8 +11,6 @@ class GameplayState extends GameState {
     var maxSpd = 600;
     var maxBVertSpd = 1600;
     var acc = 1700;
-    var fWidth = 600;
-    var fHeight = 800;
 
     override public function update(t:Float):Void {
         GlobalTime.time += dt;
@@ -35,8 +33,8 @@ class GameplayState extends GameState {
             if (Math.abs(p.speed.x) < 1)
                 p.speed.x = 0;
         }
-        p.pos.x = Mathu.clamp(p.pos.x + p.speed.x * dt, -fWidth / 2, fWidth / 2);
-        if (Math.abs(p.pos.x) > (fWidth / 2 - 1)) {
+        p.pos.x = Mathu.clamp(p.pos.x + p.speed.x * dt, -godModel.fWidth / 2, godModel.fWidth / 2);
+        if (Math.abs(p.pos.x) > (godModel.fWidth / 2 - 1)) {
             p.speed.x = 0;
         }
         var v = godModel.view.player;
@@ -48,9 +46,9 @@ class GameplayState extends GameState {
         var p = godModel.player;
         var i = godModel.input;
         p.speed.x = i.getDirProjection(horizontal) * 200;
-        p.pos.x = Mathu.clamp(p.pos.x + dt * p.speed.x, -fWidth / 2, fWidth / 2);
+        p.pos.x = Mathu.clamp(p.pos.x + dt * p.speed.x, -godModel.fWidth / 2, godModel.fWidth / 2);
 
-        if (Math.abs(p.pos.x) > (fWidth / 2 - 1)) {
+        if (Math.abs(p.pos.x) > (godModel.fWidth / 2 - 1)) {
             p.speed.x = 0;
         }
         var v = godModel.view.player;
@@ -81,13 +79,13 @@ class GameplayState extends GameState {
 
         } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
             b.pos.x += b.speed.x * dt;
-            if (Math.abs(b.pos.x) > fWidth / 2) {
-                b.pos.x = Mathu.clamp(b.pos.x, -fWidth / 2, fWidth / 2);
+            if (Math.abs(b.pos.x) > godModel.fWidth / 2) {
+                b.pos.x = Mathu.clamp(b.pos.x, -godModel.fWidth / 2, godModel.fWidth / 2);
                 b.speed.x *= -1;
             }
             b.speed.y += godModel.gravity * dt;
             b.pos.y += b.speed.y * dt;
-            if (b.pos.y < -fHeight && b.speed.y < 0) // hit with ceil
+            if (b.pos.y < -godModel.fHeight && b.speed.y < 0) // hit with ceil
                 b.speed.y *= -1;
             if (b.pos.y > godModel.baseline) b.pos.y = godModel.baseline;
         } else { // idle

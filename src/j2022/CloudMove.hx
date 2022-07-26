@@ -1,4 +1,5 @@
 package j2022;
+import j2022.GodModel;
 class CloudMove {
     public function new() {
     }
@@ -7,6 +8,7 @@ class CloudMove {
 class CloudMoveSystemBase implements CloudMoveSystem {
     var clouds:Array<Cloud> = [];
 
+    public function new() {}
     public function update(dt:Float):Void {
     }
 
@@ -14,7 +16,7 @@ class CloudMoveSystemBase implements CloudMoveSystem {
         if (clouds.contains(c))
             throw "Weong";
         clouds.push(c);
-        c.offsets[this] = new Pos();
+        c.offsets[this] = new PosWithVel();
     }
 
     public function remove(c:Cloud):Void {
@@ -37,9 +39,6 @@ class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSyste
 
     public var r = 130;
 
-
-    public function new() {}
-
     override public function update(dt:Float) {
         phase += speed * dt;
         while (phase > Math.PI * 2) phase -= Math.PI * 2;
@@ -56,13 +55,28 @@ class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSyste
     }
 }
 
+class PongMoveSystem extends CloudMoveSystemBase {
+    public var bounds:Bounds;
+
+    override public function update(dt:Float):Void {
+        for (c in clouds) {
+            var pws:PosWithVel = cast c.offsets[this];
+            pws.x += pws.vel.x * dt;
+            if (pws.x < bounds.l || pws.x > bounds.r)
+                pws.vel.x *= -1;
+            pws.y += pws.vel.y * dt;
+            if (pws.y < bounds.t || pws.y > bounds.b)
+                pws.vel.y *= -1;
+
+        }
+    }
+}
+
 class DizzyMove implements CloudMoveSystem extends CloudMoveSystemBase {
 
     public var r:Float = 40;
     public var speed = 100;
     public var rndDelta = Math.PI / 5;
-
-    public function new() {}
 
     override public function update(dt:Float):Void {
         for (c in clouds) {
@@ -122,10 +136,12 @@ class Pos {
 
     public inline function normalize(length:Float = 1) {
         if (x != 0. || y != 0.) {
-            var norm=  length / Math.sqrt(x * x + y * y);
+            var norm = length / Math.sqrt(x * x + y * y);
             x *= norm;
             y *= norm;
         }
         return cast this;
     }
+
+    public function toString() return '[$x, $y]';
 }

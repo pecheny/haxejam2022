@@ -12,7 +12,7 @@ class Cloud extends FSM<CloudStates, Cloud> {
 //    public var y:Float = 0;
     public var r:Float = 36;
 
-    public var offsets:Map<CloudMoveSystem, Pos> = new Map();
+    public var offsets:Map<CloudMoveSystem, PosWithVel> = new Map();
 
 
     public function new(m) {
