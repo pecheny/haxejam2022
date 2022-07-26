@@ -73,7 +73,7 @@ class GameplayState extends GameState {
 //            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
 
             // === axis of centers
-            var magn = Math.sqrt(b.speed.magnSq());
+            var magn = Mathu.clamp(Math.sqrt(b.speed.magnSq() * 1.2) ,0, maxBVertSpd);
             b.speed.x = b.pos.x - p.pos.x;
             b.speed.y = b.pos.y - p.pos.y;
             b.speed.normalize(magn);
