@@ -8,9 +8,9 @@ import utils.Mathu;
 class GameplayState extends GameState {
     var godModel:GodModel;
     var dt = 1 / 60;
-    var maxSpd = 400;
+    var maxSpd = 600;
     var maxBVertSpd = 1600;
-    var acc = 500;
+    var acc = 1700;
     var fWidth = 600;
     var fHeight = 800;
 
@@ -28,8 +28,9 @@ class GameplayState extends GameState {
     function handlePlayer() {
         var p = godModel.player;
         var i = godModel.input;
-        p.speed.x = Mathu.clamp(p.speed.x + i.getDirProjection(horizontal) * acc * dt, -maxSpd, maxSpd);
-        if (i.getDirProjection(horizontal) == 0) {
+        var projection = i.getDirProjection(horizontal);
+        p.speed.x = Mathu.clamp(p.speed.x + projection * acc * dt, -maxSpd, maxSpd);
+        if (projection == 0 || projection * p.speed.x < 0) {
             p.speed.x *= 0.9;
             if (Math.abs(p.speed.x) < 1)
                 p.speed.x = 0;
@@ -73,7 +74,7 @@ class GameplayState extends GameState {
 //            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
 
             // === axis of centers
-            var magn = Mathu.clamp(Math.sqrt(b.speed.magnSq() * 1.2) ,0, maxBVertSpd);
+            var magn = Mathu.clamp(Math.sqrt(b.speed.magnSq() * 1.2), 0, maxBVertSpd);
             b.speed.x = b.pos.x - p.pos.x;
             b.speed.y = b.pos.y - p.pos.y;
             b.speed.normalize(magn);
