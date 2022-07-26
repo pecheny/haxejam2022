@@ -87,7 +87,7 @@ class Clouds implements Updatable {
             c.update(dt);
             var b = model.bullet;
             var sthld = (c.r + b.r) * (c.r + b.r);
-            if (c.pos.distSq(b.pos) < sthld) {
+            if (c.currentStateName == active && c.pos.distSq(b.pos) < sthld) {
                 model.hitTHeCloud(c);
             }
         }
