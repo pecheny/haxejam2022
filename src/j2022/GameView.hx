@@ -22,6 +22,10 @@ class GameView extends Sprite {
         canvas.addChild(distraction);
 
         var controls = new Controls();
+        controls.width = model.fWidth;
+        controls.height = 120;
+        controls.x = -model.fWidth/2;
+        controls.alpha = 0.2;
         addChild(controls);
     }
 
