@@ -1,4 +1,5 @@
 package j2022;
+import input.DummyTouch;
 import j2022.Cloud.CloudStates;
 import utils.Updatable;
 import input.GamepadInput;
@@ -32,15 +33,16 @@ class GodModel {
 
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;
         var keys = new KeyPoll(openfl.Lib.current.stage);
-        input = new MetaInput().add(
+        input = new MetaInput()
+        .add(
             new KeyboardInput({
                 forward:Keyboard.RIGHT,
                 backward:Keyboard.LEFT,
                 up:Keyboard.UP,
                 down:Keyboard.DOWN,
-            }, keys, [GameButtons.jump => Keyboard.SPACE ])).add(
-            new GamepadInput(GamepadAxis.LEFT_X, GamepadAxis.LEFT_Y, [ GameButtons.jump => GamepadButton.A ])
-        );
+            }, keys, [GameButtons.jump => Keyboard.SPACE ]))
+        .add(new GamepadInput(GamepadAxis.LEFT_X, GamepadAxis.LEFT_Y, [ GameButtons.jump => GamepadButton.A ]))
+        .add(new DummyTouch(this));
     }
 
     public function reset() {
@@ -85,7 +87,7 @@ class Clouds implements Updatable {
     public function createCloud() {
         var c = new Cloud(model);
         clouds.push(c);
-        model.view.addChild(c.view);
+        model.view.add(c.view);
         trace("total " + clouds.length);
         return c;
     }
@@ -133,7 +135,7 @@ class CloudSpawner {
             var pv = c.offsets[pong];
 
             pv.x = Math.random() * w - w / 2;
-            pv.y = - Math.random() * 300  - 100;
+            pv.y = -Math.random() * 300 - 100;
             pv.vel.x = Math.random() * 100;
             pv.vel.y = Math.random() * 100;
         });
