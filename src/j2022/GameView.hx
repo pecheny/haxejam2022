@@ -41,6 +41,7 @@ class PlayerView extends Sprite {
         graphics.clear();
         this.graphics.beginFill(o.color, 1);
         graphics.drawCircle(0, 0, o.r);
+//        graphics.drawRect(-o.r, -o.r, o.r*2, o.r*2);
         graphics.endFill();
         super();
     }

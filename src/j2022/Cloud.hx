@@ -100,6 +100,8 @@ class CloudView extends Sprite {
     public function drawActive() {
         graphics.clear();
         graphics.beginFill(color, 1);
+        var o = cloud;
+//        graphics.drawRect(o.pos.x-o.r,o.pos.y-o.r, o.r*2, o.r*2);
         graphics.drawCircle(cloud.pos.x, cloud.pos.y, cloud.r);
         graphics.endFill();
     }
