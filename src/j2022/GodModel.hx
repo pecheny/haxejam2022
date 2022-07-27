@@ -17,6 +17,7 @@ class GodModel {
     public var gravity = 400;
     public var clouds:Clouds;
     public var cloudSpawner:CloudSpawner;
+    public var distraction:Distraction;
 
     public var fWidth = 600;
     public var fHeight = 800;
@@ -26,6 +27,7 @@ class GodModel {
         bullet = new Bullet();
         clouds = new Clouds(this);
         cloudSpawner = new CloudSpawner(clouds);
+        distraction = new Distraction(this);
         view = new GameView(this);
 
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;

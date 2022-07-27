@@ -1,9 +1,11 @@
 package j2022;
 import j2022.GodModel;
 import openfl.display.Sprite;
+import j2022.Distraction;
 class GameView extends Sprite {
     public var player:PlayerView;
     public var bullet:PlayerView;
+    public var distraction:DistractionView;
     var model:GodModel;
     public function new(m:GodModel) {
         super();
@@ -12,9 +14,8 @@ class GameView extends Sprite {
         addChild(player);
         bullet = new PlayerView(m.bullet);
         addChild(bullet);
-
-        for (c in m.clouds.clouds)
-            addChild(c.view);
+        distraction = new DistractionView();
+        addChild(distraction);
     }
 
     public function reset() {

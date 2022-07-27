@@ -20,6 +20,7 @@ class GameplayState extends GameState {
         handlePlayer();
         handleBullet(godModel.bullet, godModel.view.bullet);
         godModel.clouds.update(dt);
+        godModel.distraction.update(dt);
         godModel.cloudSpawner.update(dt);
     }
 

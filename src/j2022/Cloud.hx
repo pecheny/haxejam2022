@@ -7,9 +7,7 @@ class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
     public var model:GodModel;
     public var pos = new Pos();
-
-//    public var x:Float = 0;
-//    public var y:Float = 0;
+    public var distraction = 2;
     public var r:Float = 36;
 
     public var offsets:Map<CloudMoveSystem, PosWithVel> = new Map();
@@ -30,6 +28,9 @@ class Cloud extends FSM<CloudStates, Cloud> {
         super.update(t);
     }
 
+    public function getDistrPower() {
+        return if (currentStateName == active) distraction else 0;
+    }
 
 }
 
