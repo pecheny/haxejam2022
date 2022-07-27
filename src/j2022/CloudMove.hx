@@ -9,6 +9,7 @@ class CloudMoveSystemBase implements CloudMoveSystem {
     var clouds:Array<Cloud> = [];
 
     public function new() {}
+
     public function update(dt:Float):Void {
     }
 
@@ -33,7 +34,7 @@ interface CloudMoveSystem {
 }
 
 class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSystem {
-    var phase:Float = 0;
+    public var phase:Float = 0;
     var speed = Math.PI / 25;
     public var center = new Pos();
 
@@ -53,6 +54,25 @@ class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSyste
 
         }
     }
+
+    override public function add(c:Cloud):Void {
+        super.add(c);
+        var pws = c.offsets[this];
+        if (clouds.length > 1) {
+            var prev = clouds[clouds.length - 2].offsets[this];
+            pws.x = prev.x;
+            pws.y = prev.y;
+        } else {
+            var tp = c.offsets[this];
+            tp.x = center.x ;
+            tp.y = center.y -r;
+        }
+
+        c.pos.x += pws.x;
+        c.pos.y += pws.y;
+    }
+
+
 }
 
 class PongMoveSystem extends CloudMoveSystemBase {
@@ -70,6 +90,19 @@ class PongMoveSystem extends CloudMoveSystemBase {
 
         }
     }
+
+    override public function add(c:Cloud):Void {
+        super.add(c);
+        var pv = c.offsets[this];
+        var w = 500;
+        pv.x = Math.random() * w - w / 2;
+        pv.y = -Math.random() * 300 - 100;
+        pv.vel.x = Math.random() * 100;
+        pv.vel.y = Math.random() * 100;
+        c.pos.x += pv.x;
+        c.pos.y += pv.y;
+    }
+
 }
 
 class DizzyMove implements CloudMoveSystem extends CloudMoveSystemBase {

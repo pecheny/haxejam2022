@@ -59,6 +59,8 @@ class InactiveState extends CloudState {
 
     override public function onEnter():Void {
         var ms = fsm.offsets.keys();
+        fsm.pos.x = 0;
+        fsm.pos.y = 0;
         for (k in ms)
             k.remove(fsm);
         fsm.view.visible = false;

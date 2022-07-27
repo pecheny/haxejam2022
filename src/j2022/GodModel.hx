@@ -68,6 +68,7 @@ class Clouds implements Updatable {
         model = m;
         var round = new RoundCloudMoveSystem();
         round.center.y = -350;
+        round.phase = 2;
         moveSystems.push(round);
 
         var dizzy = new DizzyMove();
@@ -81,6 +82,19 @@ class Clouds implements Updatable {
             t:-model.fHeight,
         }
         moveSystems.push(pong);
+
+//        var pong2 = new PongMoveSystem();
+//        pong2.bounds = {
+//            l:-model.fWidth / 4,
+//            r:model.fWidth / 4,
+//            b:- model.fHeight / 4,
+//            t:- 3*model.fHeight / 4,
+//        }
+//        moveSystems.push(pong);
+
+        var round2 = new RoundCloudMoveSystem();
+        round2.center.y = -500;
+        moveSystems.push(round2);
 
     }
 
@@ -121,23 +135,19 @@ class CloudSpawner {
     public function new(c) {
         clouds = c;
         randomInitializer.push((c:Cloud) -> {
-            c.r = 32;
+            c.r = 16;
             clouds.moveSystems[0].add(c);
             clouds.moveSystems[1].add(c);
         });
 
         randomInitializer.push((c:Cloud) -> {
             c.r = 32;
-            var w = 500;
+            clouds.moveSystems[3].add(c);
+        });
 
-            var pong = clouds.moveSystems[2];
-            pong.add(c);
-            var pv = c.offsets[pong];
-
-            pv.x = Math.random() * w - w / 2;
-            pv.y = -Math.random() * 300 - 100;
-            pv.vel.x = Math.random() * 100;
-            pv.vel.y = Math.random() * 100;
+        randomInitializer.push((c:Cloud) -> {
+            c.r = 32;
+            clouds.moveSystems[2].add(c);
         });
 
 //        randomInitializer.push((c:Cloud) -> {
