@@ -1,4 +1,5 @@
 package j2022;
+import openfl.events.KeyboardEvent;
 import openfl.Lib;
 import openfl.events.MouseEvent;
 import fsm.State;
@@ -14,11 +15,15 @@ class GameFsm extends FSM<GameStates, GameFsm> {
         Lib.current.stage.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 //        stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 //        Lib.current.stage.stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
-//        Lib.current.stage.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+        Lib.current.stage.stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
     }
 
     public function mouseDownHandler(e:MouseEvent):Void {
         getCurrentState().mouseDownHandler(e);
+    }
+
+    public function keyUpHandler(e) {
+        getCurrentState().keyUpHandler(e);
     }
 }
 

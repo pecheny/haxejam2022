@@ -1,4 +1,5 @@
 package j2022;
+import openfl.events.KeyboardEvent;
 import flash.display.DisplayObject;
 import openfl.events.MouseEvent;
 import j2022.ui.IntroScreen;
@@ -29,5 +30,7 @@ class IntroState extends GameState {
         }
     }
 
-
+    override public function keyUpHandler(e:KeyboardEvent):Void {
+        fsm.changeState(GameStates.GAMEPLAY);
+    }
 }
