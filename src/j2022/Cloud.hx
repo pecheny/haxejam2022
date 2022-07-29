@@ -1,8 +1,11 @@
 package j2022;
+import openfl.events.Event;
+import flash.display.MovieClip;
 import openfl.display.Sprite;
 import fsm.FSM;
 import fsm.State;
 import j2022.CloudMove;
+import j2022.GodModel;
 class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
     public var model:GodModel;
@@ -20,7 +23,7 @@ class Cloud extends FSM<CloudStates, Cloud> {
         addState(inactive, new InactiveState());
         addState(active, new ActiveState());
         addState(disappearing, new DisappearState());
-        changeState(active);
+        changeState(inactive);
     }
 
     override public function update(t:Float) {
@@ -51,6 +54,12 @@ class DisappearState extends CloudState {
     override public function onEnter():Void {
         t = 0;
     }
+
+    override public function onExit():Void {
+        super.onExit();
+        fsm.model.cloudSpawner.inactiveClouds.push(fsm);
+    }
+
 }
 class InactiveState extends CloudState {
     override public function onExit():Void {
@@ -64,7 +73,6 @@ class InactiveState extends CloudState {
         for (k in ms)
             k.remove(fsm);
         fsm.view.visible = false;
-        fsm.model.cloudSpawner.inactiveClouds.push(fsm);
     }
 }
 class ActiveState extends CloudState {
@@ -82,6 +90,11 @@ class ActiveState extends CloudState {
         fsm.pos.y = (fsm.pos.y + _y) / 2;
         fsm.view.drawActive();
     }
+
+
+    override public function onEnter():Void {
+        fsm.view.init(Math.floor(Math.random() * 6));
+    }
 }
 
 class CloudView extends Sprite {
@@ -91,33 +104,66 @@ class CloudView extends Sprite {
     var spreadRange = new Range(20, 36);
     var sizeRange = new Range(10, 5);
     var alphaRange = new Range(0.9, 0);
+    var asset:MovieClip;
+    var icon:MovieClip;
+    var assetSize = 64;
 
     public function new(c) {
-        this.cloud = c;
-        var total = 5;
-        angles = [for (i in 0...total) Math.PI * 2 * i / total] ;
         super();
+        asset = cast new CloudAsset();
+        addChild(asset);
+        asset.stop();
+        icon = new Icons();
+        addChild(icon);
+        icon.stop();
+//        asset.alpha = 0.5;
+//        asset.addEventListener(Event.ENTER_FRAME, e -> {if (asset.currentFrame == asset.totalFrames)asset.stop();});
+        this.cloud = c;
+//        var total = 5;
+//        angles = [for (i in 0...total) Math.PI * 2 * i / total] ;
+//        super();
+    }
+
+    function setPos() {
+        x = cloud.pos.x;
+        y = cloud.pos.y;
+    }
+
+    public function init(fr) {
+        trace("R: " + cloud.r);
+        var scale = cloud.r * 2 / assetSize;
+        asset.scaleX = asset.scaleY = scale;
+        icon.gotoAndStop(fr);
     }
 
     public function drawActive() {
-        graphics.clear();
-        graphics.beginFill(color, 1);
-        var o = cloud;
-//        graphics.drawRect(o.pos.x-o.r,o.pos.y-o.r, o.r*2, o.r*2);
-        graphics.drawCircle(cloud.pos.x, cloud.pos.y, cloud.r);
-        graphics.endFill();
+        icon.visible = true;
+        if (GlobalTime.tick % 10 == 0) asset.gotoAndStop(Math.ceil( Math.random() * 3 ));
+        setPos();
+//        graphics.clear();
+//        graphics.beginFill(color, 1);
+//        var o = cloud;
+////        graphics.drawRect(o.pos.x-o.r,o.pos.y-o.r, o.r*2, o.r*2);
+//        graphics.drawCircle(cloud.pos.x, cloud.pos.y, cloud.r);
+//        graphics.endFill();
     }
 
     public function drawDisappear(t:Float) {
-        graphics.clear();
-        for (i in 0...angles.length) {
-            var r = spreadRange.transfomrValue(t);
-            var x = cloud.pos.x + Math.cos(angles[i]) * r;
-            var y = cloud.pos.y + Math.sin(angles[i]) * r;
-            graphics.beginFill(color, alphaRange.transfomrValue(t));
-            graphics.drawCircle(x, y, sizeRange.transfomrValue(t));
-            graphics.endFill();
-        }
+        icon.visible = false;
+        var totalFrames = 4;
+        var startFrame = 4;
+        var frame = startFrame + Math.floor(t * totalFrames);
+        asset.gotoAndPlay(frame);
+        setPos();
+//        graphics.clear();
+//        for (i in 0...angles.length) {
+//            var r = spreadRange.transfomrValue(t);
+//            var x = cloud.pos.x + Math.cos(angles[i]) * r;
+//            var y = cloud.pos.y + Math.sin(angles[i]) * r;
+//            graphics.beginFill(color, alphaRange.transfomrValue(t));
+//            graphics.drawCircle(x, y, sizeRange.transfomrValue(t));
+//            graphics.endFill();
+//        }
     }
 }
 
