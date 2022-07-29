@@ -11,6 +11,7 @@ class Main extends AbstractEngine {
         stage.align = StageAlign.TOP_LEFT;
         var m = new GodModel();
         fsm = new GameFsm(m);
+        m.fsm = fsm;
         fsm.changeState(GameStates.INTRO);
     }
 

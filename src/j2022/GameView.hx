@@ -20,18 +20,20 @@ class GameView extends Sprite {
         canvas.addChild(bullet);
         distraction = new DistractionView();
         canvas.addChild(distraction);
+        distraction.y = - model.fHeight + 30;
 
         var controls = new Controls();
         controls.width = model.fWidth;
         controls.height = 120;
-        controls.x = -model.fWidth/2;
+//        controls.x = -model.fWidth/2;
         controls.alpha = 0.2;
+        controls.y = openfl.Lib.current.stage.stageHeight;
         addChild(controls);
     }
 
     public function reset() {
-        x = openfl.Lib.current.stage.stageWidth / 2;
-        y = openfl.Lib.current.stage.stageHeight - 30;
+        canvas.x = openfl.Lib.current.stage.stageWidth / 2;
+        canvas.y = openfl.Lib.current.stage.stageHeight - 30;
     }
 
     public function add(d:DisplayObject) {

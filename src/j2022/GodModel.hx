@@ -19,6 +19,7 @@ class GodModel {
     public var clouds:Clouds;
     public var cloudSpawner:CloudSpawner;
     public var distraction:Distraction;
+    public var fsm:GameFsm;
 
     public var fWidth = 600;
     public var fHeight = 800;
@@ -51,6 +52,9 @@ class GodModel {
         bullet.reset();
         bullet.pos.x = baseline;
         view.reset();
+        distraction.reset();
+        clouds.reset();
+        cloudSpawner.reset();
         GlobalTime.reset();
     }
 
@@ -98,6 +102,14 @@ class Clouds implements Updatable {
 
     }
 
+    public function reset() {
+        for (c in clouds) {
+            c.changeState(inactive);
+            if (!model.cloudSpawner.inactiveClouds.contains(c))
+                model.cloudSpawner.inactiveClouds.push(c);
+        }
+    }
+
     public function createCloud() {
         var c = new Cloud(model);
         clouds.push(c);
@@ -131,6 +143,10 @@ class CloudSpawner {
     var clouds:Clouds;
     var randomInitializer = [];
     var max = 26;
+
+    public function reset() {
+        nextTick = 0;
+    }
 
     public function new(c) {
         clouds = c;

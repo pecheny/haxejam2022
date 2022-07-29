@@ -1,4 +1,5 @@
 package j2022;
+import j2022.GameFsm.GameStates;
 import utils.Mathu;
 import openfl.display.Sprite;
 import j2022.GodModel.GlobalTime;
@@ -10,6 +11,7 @@ class Distraction {
     var gameoverCounter = 0;
     var model:GodModel;
     var maxDistraction = 100;
+    var offset = 0.;
 
     public function new(m) {
         model = m;
@@ -29,13 +31,20 @@ class Distraction {
 
         if (distraction > 80) {
             gameoverCounter++;
+            model.view.distraction.y -= offset;
+            offset = Math.random() * 10;
+            model.view.distraction.y += offset;
             if (gameoverCounter >= gameoverCooldown) gameOver();
         } else {
+            model.view.distraction.y -= offset;
+            offset = 0;
             gameoverCounter = 0;
         }
     }
 
-    function gameOver() {}
+    function gameOver() {
+        model.fsm.changeState(GameStates.INTRO);
+    }
 
     function calcAffection() {
         var a =0;
@@ -43,6 +52,14 @@ class Distraction {
             a += c.getDistrPower();
         }
         return a;
+    }
+
+    public function reset() {
+        distraction = 50;
+        gameoverCounter = 0;
+        model.view.distraction.y -= offset;
+        offset = 0;
+        model.view.distraction.setValue(distraction / maxDistraction);
     }
 }
 
