@@ -220,7 +220,7 @@ class GlobalTime {
 class Bullet extends GameObj {
     public function new() {
         super();
-        color = 0xb08080;
+        color = 0x201010;
         r = 8;
     }
 }
