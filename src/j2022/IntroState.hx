@@ -7,12 +7,18 @@ import j2022.GameFsm;
 class IntroState extends GameState {
     var view = new IntroScreen();
 
+    public function new() {
+        super();
+        view.introFinished.listen(()->fsm.changeState(GAMEPLAY));
+    }
+
     override public function update(t:Float):Void {
         super.update(t);
     }
 
     override public function onEnter():Void {
         super.onEnter();
+        view.reset();
         openfl.Lib.current.stage.addChild(view);
     }
 

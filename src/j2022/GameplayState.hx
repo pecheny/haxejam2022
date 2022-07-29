@@ -11,10 +11,15 @@ class GameplayState extends GameState {
     var maxSpd = 600;
     var maxBVertSpd = 1600;
     var acc = 1700;
+    var openingDur = 1.;
 
     override public function update(t:Float):Void {
         GlobalTime.time += dt;
         GlobalTime.tick ++;
+        if (GlobalTime.time < openingDur) {
+            godModel.view.curtain.scaleX = 1 - (GlobalTime.time / openingDur);
+        }
+
 
 //        handlePlayerSimple();
         handlePlayer();

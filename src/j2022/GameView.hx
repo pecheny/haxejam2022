@@ -9,6 +9,7 @@ class GameView extends Sprite {
     public var bullet:BulletView;
     public var distraction:DistractionView;
     public var canvas = new Sprite();
+    public var curtain:Sprite;
     var screen:Sprite;
     var model:GodModel;
     var face:MovieClip;
@@ -18,6 +19,8 @@ class GameView extends Sprite {
         screen.x = openfl.Lib.current.stage.stageWidth / 2;
         screen.y = openfl.Lib.current.stage.stageHeight / 2;
         addChild(screen);
+
+        curtain = cast screen.getChildByName("_curtain");
 
         face = cast screen.getChildByName("_face");
         face.stop();
