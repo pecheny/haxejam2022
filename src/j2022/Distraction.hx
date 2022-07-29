@@ -31,12 +31,12 @@ class Distraction {
 
         if (distraction > 80) {
             gameoverCounter++;
-            model.view.distraction.y -= offset;
+            model.view.distraction.view.y -= offset;
             offset = Math.random() * 10;
-            model.view.distraction.y += offset;
+            model.view.distraction.view.y += offset;
             if (gameoverCounter >= gameoverCooldown) gameOver();
         } else {
-            model.view.distraction.y -= offset;
+            model.view.distraction.view.y -= offset;
             offset = 0;
             gameoverCounter = 0;
         }
@@ -57,7 +57,7 @@ class Distraction {
     public function reset() {
         distraction = 50;
         gameoverCounter = 0;
-        model.view.distraction.y -= offset;
+        model.view.distraction.view.y -= offset;
         offset = 0;
         model.view.distraction.setValue(distraction / maxDistraction);
     }
@@ -66,7 +66,7 @@ class Distraction {
 class DistractionView extends Sprite {
     var pointer:Sprite;
     var w:Float = 300;
-    var view:Sprite;
+    public var view:Sprite;
 
     public function new(v) {
         super();

@@ -130,7 +130,6 @@ class CloudView extends Sprite {
     }
 
     public function init(fr) {
-        trace("R: " + cloud.r);
         var scale = cloud.r * 2 / assetSize;
         asset.scaleX = asset.scaleY = scale;
         asset.gotoAndStop(1);
