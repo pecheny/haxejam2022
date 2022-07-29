@@ -133,7 +133,9 @@ class CloudView extends Sprite {
         trace("R: " + cloud.r);
         var scale = cloud.r * 2 / assetSize;
         asset.scaleX = asset.scaleY = scale;
+        asset.gotoAndStop(1);
         icon.gotoAndStop(fr);
+        setPos();
     }
 
     public function drawActive() {

@@ -57,19 +57,19 @@ class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSyste
 
     override public function add(c:Cloud):Void {
         super.add(c);
-        var pws = c.offsets[this];
+        var pv = c.offsets[this];
         if (clouds.length > 1) {
             var prev = clouds[clouds.length - 2].offsets[this];
-            pws.x = prev.x;
-            pws.y = prev.y;
+            pv.x = prev.x;
+            pv.y = prev.y;
         } else {
             var tp = c.offsets[this];
             tp.x = center.x ;
             tp.y = center.y -r;
         }
 
-        c.pos.x += pws.x;
-        c.pos.y += pws.y;
+        c.pos.x += pv.x;
+        c.pos.y += pv.y;
     }
 
 
@@ -80,13 +80,13 @@ class PongMoveSystem extends CloudMoveSystemBase {
 
     override public function update(dt:Float):Void {
         for (c in clouds) {
-            var pws:PosWithVel = cast c.offsets[this];
-            pws.x += pws.vel.x * dt;
-            if (pws.x < bounds.l || pws.x > bounds.r)
-                pws.vel.x *= -1;
-            pws.y += pws.vel.y * dt;
-            if (pws.y < bounds.t || pws.y > bounds.b)
-                pws.vel.y *= -1;
+            var pv:PosWithVel = cast c.offsets[this];
+            pv.x += pv.vel.x * dt;
+            if (pv.x < bounds.l || pv.x > bounds.r)
+                pv.vel.x *= -1;
+            pv.y += pv.vel.y * dt;
+            if (pv.y < bounds.t || pv.y > bounds.b)
+                pv.vel.y *= -1;
 
         }
     }
@@ -113,20 +113,20 @@ class DizzyMove implements CloudMoveSystem extends CloudMoveSystemBase {
 
     override public function update(dt:Float):Void {
         for (c in clouds) {
-            var pws:PosWithVel = cast c.offsets[this];
-            pws.x += pws.vel.x * dt;
-            pws.y += pws.vel.y * dt;
+            var pv:PosWithVel = cast c.offsets[this];
+            pv.x += pv.vel.x * dt;
+            pv.y += pv.vel.y * dt;
 
-            if (pws.magnSq() > r * r) {
-                pws.vel.x *= -1;
-                pws.vel.y *= -1;
+            if (pv.magnSq() > r * r) {
+                pv.vel.x *= -1;
+                pv.vel.y *= -1;
 //                var angle = Math.random() * rndDelta - (rndDelta / 2);
 //
-//                var newX = pws.vel.x * Math.cos(angle) - pws.vel.y * Math.sin(angle);
-//                var newY = pws.vel.x * Math.sin(angle) + pws.vel.y * Math.cos(angle) ;
+//                var newX = pv.vel.x * Math.cos(angle) - pv.vel.y * Math.sin(angle);
+//                var newY = pv.vel.x * Math.sin(angle) + pv.vel.y * Math.cos(angle) ;
 //
-//                pws.vel.x = newX;
-//                pws.vel.y = newX;
+//                pv.vel.x = newX;
+//                pv.vel.y = newX;
             }
 
         }
@@ -134,11 +134,13 @@ class DizzyMove implements CloudMoveSystem extends CloudMoveSystemBase {
 
     override public function add(c:Cloud):Void {
         super.add(c);
-        var pws = new PosWithVel();
-        c.offsets[this] = pws;
+        var pv = new PosWithVel();
+        c.offsets[this] = pv;
         var ang = Math.random() * Math.PI * 2;
-        pws.vel.x = Math.cos(ang) * speed;
-        pws.vel.y = Math.sin(ang) * speed;
+        pv.vel.x = Math.cos(ang) * speed;
+        pv.vel.y = Math.sin(ang) * speed;
+        c.pos.x += pv.x;
+        c.pos.y += pv.y;
     }
 
 }
