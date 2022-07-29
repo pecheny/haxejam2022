@@ -22,6 +22,8 @@ class GameView extends Sprite {
         face = cast screen.getChildByName("_face");
         face.stop();
 
+        var _distraction = cast screen.getChildByName("_distraction");
+
         addChild(canvas);
         canvas.mouseEnabled = false;
         this.model = m;
@@ -29,7 +31,7 @@ class GameView extends Sprite {
         canvas.addChild(player);
         bullet = new BulletView(m.bullet);
         canvas.addChild(bullet);
-        distraction = new DistractionView();
+        distraction = new DistractionView(_distraction);
         canvas.addChild(distraction);
         distraction.y = - model.fHeight + 30;
 

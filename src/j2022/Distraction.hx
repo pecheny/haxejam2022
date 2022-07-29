@@ -65,18 +65,22 @@ class Distraction {
 
 class DistractionView extends Sprite {
     var pointer:Sprite;
-    var w = 300;
+    var w:Float = 300;
+    var view:Sprite;
 
-    public function new() {
+    public function new(v) {
         super();
-        pointer = new Sprite();
-        pointer.graphics.beginFill(0xa0a000);
-        var pr = 3;
-        var ph = 32;
-        pointer.graphics.drawRect(-pr, -ph, pr * 2, ph * 2);
-        addChild(pointer);
-        graphics.beginFill(0x907000);
-        graphics.drawRect(0, 0, w, 32);
+        this.view = v;
+        pointer = cast view.getChildByName("_marker");
+        w = view.width;
+//        pointer = new Sprite();
+//        pointer.graphics.beginFill(0xa0a000);
+//        var pr = 3;
+//        var ph = 32;
+//        pointer.graphics.drawRect(-pr, -ph, pr * 2, ph * 2);
+//        addChild(pointer);
+//        graphics.beginFill(0x907000);
+//        graphics.drawRect(0, 0, w, 32);
     }
 
     public function setValue(v:Float) {
