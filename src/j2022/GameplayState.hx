@@ -9,9 +9,10 @@ class GameplayState extends GameState {
     var godModel:GodModel;
     var dt = 1 / 60;
     var maxSpd = 600;
-    var maxBVertSpd = 1600;
+    var maxBVertSpd = 1000;
     var acc = 1700;
     var openingDur = 1.;
+    var stunEnd = 0;
 
     override public function update(t:Float):Void {
         GlobalTime.time += dt;
@@ -29,9 +30,26 @@ class GameplayState extends GameState {
         godModel.cloudSpawner.update(dt);
     }
 
+
+    inline function stunned() {
+        return stunEnd > GlobalTime.tick;
+    }
+
+    inline function stun() {
+        stunEnd = GlobalTime.tick + 60 * 3;
+    }
+
+    var playerJustHit = false;
+
     function handlePlayer() {
         var p = godModel.player;
         var i = godModel.input;
+        var v = godModel.view.player;
+        if (stunned()) {
+            v.y = p.pos.y + 10;
+            v.update(Stunned);
+            return;
+        }
         var projection = i.getDirProjection(horizontal);
         p.speed.x = Mathu.clamp(p.speed.x + projection * acc * dt, -maxSpd, maxSpd);
         if (projection == 0 || projection * p.speed.x < 0) {
@@ -43,7 +61,12 @@ class GameplayState extends GameState {
         if (Math.abs(p.pos.x) > (godModel.fWidth / 2 - 1)) {
             p.speed.x = 0;
         }
-        var v = godModel.view.player;
+        if (playerJustHit) {
+            playerJustHit = false;
+            v.update(Hit);
+        }
+        else
+            v.update(Active);
         v.x = p.pos.x;
         v.y = p.pos.y;
     }
@@ -63,7 +86,7 @@ class GameplayState extends GameState {
     }
 
 
-    function handleBullet(b:Bullet, v:PlayerView) {
+    function handleBullet(b:Bullet, v:BulletView) {
         var p = godModel.player;
         var i = godModel.input;
         var thld = ( p.r + b.r ) * ( p.r + b.r );
@@ -72,16 +95,21 @@ class GameplayState extends GameState {
             b.pos.x = p.pos.x;
             b.pos.y = p.pos.y - 10;
             if (i.pressed(GameButtons.jump)) lauch(b);
-        } else if (dst < thld && b.speed.y > 0) { // handle player hit
+        } else if (dst < thld && b.speed.y > 0 && !stunned()) { // handle player hit
             // ===  speed reverse
 //            b.speed.x *= -1;
 //            b.speed.y = Mathu.clamp(b.speed.y * -1.2, -maxBVertSpd, 0);
 
             // === axis of centers
             var magn = Mathu.clamp(Math.sqrt(b.speed.magnSq() * 1.2), 0, maxBVertSpd);
+            if (b.speed.x * b.speed.x < 1 && magn == maxBVertSpd)
+                stun();
+
             b.speed.x = b.pos.x - p.pos.x;
             b.speed.y = b.pos.y - p.pos.y;
+
             b.speed.normalize(magn);
+            playerJustHit = true;
 
         } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
             b.pos.x += b.speed.x * dt;
@@ -95,7 +123,7 @@ class GameplayState extends GameState {
                 b.speed.y *= -1;
             if (b.pos.y > godModel.baseline) b.pos.y = godModel.baseline;
         } else { // idle
-            if (Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) pick(b); // check dist and pick
+            if (!stunned() && Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) pick(b); // check dist and pick
         }
         v.x = b.pos.x;
         v.y = b.pos.y;
@@ -121,6 +149,7 @@ class GameplayState extends GameState {
         openfl.Lib.current.addChild(godModel.view);
 //        var player = GodModel.instance.view.player;
         godModel.reset();
+        stunEnd = 0;
     }
 
     override public function onExit():Void {

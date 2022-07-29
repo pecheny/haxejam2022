@@ -13,6 +13,7 @@ class GameView extends Sprite {
     var screen:Sprite;
     var model:GodModel;
     var face:MovieClip;
+
     public function new(m:GodModel) {
         super();
         screen = new Gameplay();
@@ -30,13 +31,15 @@ class GameView extends Sprite {
         addChild(canvas);
         canvas.mouseEnabled = false;
         this.model = m;
-        player = new PlayerView(m.player);
+        var pl = screen.getChildByName("_player");
+        pl.x = pl.y = 0;
+        player = new PlayerView(m.player, cast pl);
         canvas.addChild(player);
         bullet = new BulletView(m.bullet);
         canvas.addChild(bullet);
         distraction = new DistractionView(_distraction);
         canvas.addChild(distraction);
-        distraction.y = - model.fHeight + 30;
+        distraction.y = -model.fHeight + 30;
 
 //        var controls = new Controls();
 //        controls.width = model.fWidth;
@@ -49,9 +52,7 @@ class GameView extends Sprite {
         controls.y += openfl.Lib.current.stage.stageHeight / 2;
         addChild(controls);
 
-        var pl = screen.getChildByName("_player");
-        player.addChild(pl);
-        pl.x = pl.y = 0;
+//        player.addChild(pl);
 
     }
 
@@ -65,11 +66,38 @@ class GameView extends Sprite {
     }
 }
 
-
-
+enum PlayerState {
+    Hit;
+    Stunned;
+    Active;
+}
 class PlayerView extends Sprite {
+    var asset:MovieClip;
+
+    public function new(o:GameObj, v:MovieClip) {
+        super();
+        asset = v;
+        addChild(v);
+        v.stop();
+    }
+
+    function animateRegion(f1, f2) {
+        if (GlobalTime.tick % 10 == 0) {
+            var fr = asset.currentFrame < f2 ? asset.currentFrame + 1 : f1;
+            asset.gotoAndStop(fr);
+        }
+    }
+
+    public function update(state:PlayerState) {
+        switch state {
+            case Stunned:animateRegion(3, 4);
+            case Active:    animateRegion(1, 2);
+            case Hit:    asset.gotoAndStop(5);
+        }
+    }
+}
+class BulletView extends Sprite {
     public function new(o:GameObj) {
-        trace(graphics);
         graphics.clear();
         this.graphics.beginFill(o.color, 1);
         graphics.drawCircle(0, 0, o.r);
@@ -77,15 +105,4 @@ class PlayerView extends Sprite {
         graphics.endFill();
         super();
     }
-}
-class BulletView extends PlayerView {
-//    public function new(o:GameObj) {
-//        trace(graphics);
-//        graphics.clear();
-//        this.graphics.beginFill(o.color, 1);
-//        graphics.drawCircle(0, 0, o.r);
-////        graphics.drawRect(-o.r, -o.r, o.r*2, o.r*2);
-//        graphics.endFill();
-//        super();
-//    }
 }
