@@ -37,6 +37,77 @@ class IntroState extends GameState {
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
+        trace("KEY");
+        fsm.changeState(GameStates.GAMEPLAY);
+    }
+}
+class WelcomeState extends GameState {
+    var view = new Welcome();
+
+    public function new() {
+        super();
+    }
+
+    override public function update(t:Float):Void {
+        super.update(t);
+    }
+
+    override public function onEnter():Void {
+        super.onEnter();
+        openfl.Lib.current.stage.addChild(view);
+    }
+
+    override public function onExit():Void {
+        super.onExit();
+        openfl.Lib.current.stage.removeChild(view);
+    }
+
+    override public function mouseDownHandler(e:MouseEvent):Void {
+
+        var target:DisplayObject = e.target;
+        trace(target.name);
+        switch target.name {
+            case "_play": fsm.changeState(GameStates.INTRO);
+        }
+    }
+
+    override public function keyUpHandler(e:KeyboardEvent):Void {
+        trace("KEY");
+        fsm.changeState(GameStates.GAMEPLAY);
+    }
+}
+
+class GameOverState extends GameState {
+    var view = new GameOver();
+
+    public function new() {
+        super();
+    }
+
+    override public function update(t:Float):Void {
+        super.update(t);
+    }
+
+    override public function onEnter():Void {
+        super.onEnter();
+        openfl.Lib.current.stage.addChild(view);
+    }
+
+    override public function onExit():Void {
+        super.onExit();
+        openfl.Lib.current.stage.removeChild(view);
+    }
+
+    override public function mouseDownHandler(e:MouseEvent):Void {
+        var target:DisplayObject = e.target;
+        trace(target.name);
+        switch target.name {
+            case "_play": fsm.changeState(GameStates.GAMEPLAY);
+        }
+    }
+
+    override public function keyUpHandler(e:KeyboardEvent):Void {
+        trace("KEY");
         fsm.changeState(GameStates.GAMEPLAY);
     }
 }

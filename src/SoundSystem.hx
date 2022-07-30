@@ -22,7 +22,7 @@ class SoundSystem {
 
     public function startMusic():Void {
 //		SoundHX.fadeAllTo(0);
-        playLoop("ChimeChase.mp3", 1);
+//        playLoop("ChimeChase.mp3", 1);
     }
 
     public function ballWallHit() {

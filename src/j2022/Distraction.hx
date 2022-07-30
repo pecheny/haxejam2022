@@ -13,7 +13,7 @@ class Distraction {
     var maxDistraction = 100;
     var offset = 0.;
 
-    var affection:Float;
+    var affection:Float = 0;
     var distrType:DistractionType;
 
     var calmCounter = 0;
@@ -78,7 +78,7 @@ class Distraction {
 
     function gameOver() {
         model.sounds.gameOver();
-        model.fsm.changeState(GameStates.INTRO);
+        model.fsm.changeState(GameStates.GAMEOVER);
     }
 
     var typedDistr = [0., 0, 0, 0];// new Map<DistractionType, Int>() ;
@@ -92,6 +92,7 @@ class Distraction {
             a += c.getDistrPower();
             typedDistr[c.type] += c.getTypeW(c.typeD);
         }
+        affection = a;
         var max = 0.;
         for (i in 0...typedDistr.length) {
             if (typedDistr[i] > max) {

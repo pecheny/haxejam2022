@@ -4,6 +4,7 @@ import openfl.Lib;
 import openfl.events.MouseEvent;
 import fsm.State;
 import fsm.FSM;
+import j2022.IntroState;
 class GameFsm extends FSM<GameStates, GameFsm> {
     public var model(default, null):GodModel;
     public function new(m) {
@@ -11,6 +12,8 @@ class GameFsm extends FSM<GameStates, GameFsm> {
         this.model = m;
         addState(GAMEPLAY, new GameplayState());
         addState(INTRO, new IntroState());
+        addState(WELCOME, new WelcomeState());
+        addState(GAMEOVER, new GameOverState());
 
         Lib.current.stage.stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDownHandler);
 //        stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
@@ -30,6 +33,8 @@ class GameFsm extends FSM<GameStates, GameFsm> {
 @:enum abstract GameStates(String) to String {
     var GAMEPLAY = "GAMEPLAY";
     var INTRO = "INTRO";
+    var WELCOME = "WELCOME";
+    var GAMEOVER = "GAMEOVER";
 }
 
 class GameState extends State<GameStates, GameFsm> {

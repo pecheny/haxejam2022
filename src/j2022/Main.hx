@@ -12,7 +12,7 @@ class Main extends AbstractEngine {
         var m = new GodModel();
         fsm = new GameFsm(m);
         m.fsm = fsm;
-        fsm.changeState(GameStates.INTRO);
+        fsm.changeState(GameStates.WELCOME);
     }
 
     override public function update(t:Float):Void {
