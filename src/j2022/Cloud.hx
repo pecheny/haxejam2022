@@ -6,18 +6,22 @@ import fsm.FSM;
 import fsm.State;
 import j2022.CloudMove;
 import j2022.GodModel;
+
 class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
     public var model:GodModel;
     public var pos = new Pos();
     public var distraction = 2;
+    public var typeD = 2;
+    public var type:DistractionType;
     public var r:Float = 36;
     public var viewId:Int = 0;
 
     public var offsets:Map<CloudMoveSystem, PosWithVel> = new Map();
 
-    public function reset() {
-        r= 36;
+    public function reset(type) {
+        r = 36;
+        this.type = type;
     }
 
     public function new(m) {
@@ -36,6 +40,10 @@ class Cloud extends FSM<CloudStates, Cloud> {
 
     public function getDistrPower() {
         return if (currentStateName == active) distraction else 0;
+    }
+
+    public function getTypeW(t:DistractionType):Float {
+        return if (t == type) typeD else 0;
     }
 
 }
@@ -67,6 +75,7 @@ class DisappearState extends CloudState {
 }
 class InactiveState extends CloudState {
     override public function onExit():Void {
+
         fsm.view.visible = true;
     }
 
@@ -141,11 +150,12 @@ class CloudView extends Sprite {
         icon.gotoAndStop(fr);
         setPos();
     }
+
     var cloud_f1 = 7;
 
     public function drawActive() {
         icon.visible = true;
-        if (GlobalTime.tick % 10 == 0) asset.gotoAndStop(cloud_f1 + Math.ceil( Math.random() * 3 ));
+        if (GlobalTime.tick % 10 == 0) asset.gotoAndStop(cloud_f1 + Math.ceil(Math.random() * 3));
         setPos();
 //        graphics.clear();
 //        graphics.beginFill(color, 1);
@@ -158,7 +168,7 @@ class CloudView extends Sprite {
     public function drawDisappear(t:Float) {
         icon.visible = false;
         var totalFrames = 4;
-        var startFrame =11;// 4;
+        var startFrame = 11;// 4;
         var frame = startFrame + Math.floor(t * totalFrames);
         asset.gotoAndPlay(frame);
         setPos();

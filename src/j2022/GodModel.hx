@@ -152,8 +152,8 @@ class CloudSpawners {
 
         spawners.push(new SuicidalSpawner(clouds, this));
         spawners.push(new FlySpawner(clouds, this));
-//        spawners.push(new DesiresSpawner(clouds, this));
-//        spawners.push(new DangerSpawner(clouds, this));
+        spawners.push(new DesiresSpawner(clouds, this));
+        spawners.push(new DangerSpawner(clouds, this));
 
     }
 
@@ -260,7 +260,7 @@ class SuicidalSpawner extends CloudSpawner {
         if (round.clouds.length > 10)
             return;
         var c = spawners.getCloud();
-        c.reset();
+        c.reset(Suicidal);
         c.r = 32;
         c.viewId = getFr();
         round.add(c);
@@ -308,7 +308,7 @@ class FlySpawner extends CloudSpawner {
         if (pong.clouds.length > 10)
             return;
         var c = spawners.getCloud();
-        c.reset();
+        c.reset(Fly);
         c.r = 16;
         c.viewId = getFr();
         pong.add(c);
@@ -365,7 +365,7 @@ class DesiresSpawner extends CloudSpawner {
         if (pong.clouds.length > 10)
             return;
         var c = spawners.getCloud();
-        c.reset();
+        c.reset(Desire);
         c.r = 16;
         pong.add(c);
         if (Math.random() > 0.5)
@@ -411,12 +411,11 @@ class DangerSpawner extends CloudSpawner {
     function spawn() {
         nextSpawn += getCooldown();
         var c = spawners.getCloud();
-        c.reset();
+        c.reset(Toilet);
         c.r = 40;
 //        trace(vpoints[Math.floor(Math.random() * vpoints.length)]);
         c.pos.x = hpoints[Math.floor(Math.random() * hpoints.length)];
         c.pos.y = vpoints[Math.floor(Math.random() * vpoints.length)];
-        trace(c.pos);
         origins.add(c);
         var ofs = c.offsets[origins];
         ofs.x = c.pos.x;
@@ -509,4 +508,20 @@ class GameObj {
         pos.reset();
         speed.reset();
     }
+}
+
+@:enum abstract DistractionType(Int) to Int from Int {
+    var Suicidal;
+    var Desire;
+    var Toilet;
+    var Fly;
+}
+
+@:enum abstract FaceType(Int) to Int {
+    var face_sad = 7;
+    var face_calm = 6;
+    var face_passionate = 0;
+    var face_distracted = 1;
+    var face_panic = 2;
+    var face_susp = 3;
 }

@@ -1,4 +1,6 @@
 package j2022;
+import flash.ui.Keyboard;
+import openfl.events.KeyboardEvent;
 import al.al2d.Axis2D;
 import input.Input.GameButtons;
 import j2022.GameFsm;
@@ -13,8 +15,11 @@ class GameplayState extends GameState {
     var acc = 1700;
     var openingDur = 1.;
     var stunEnd = 0;
+    var paused = false;
 
     override public function update(t:Float):Void {
+        if (paused)
+            return;
         GlobalTime.time += dt;
         GlobalTime.tick ++;
         if (GlobalTime.time < openingDur) {
@@ -166,6 +171,15 @@ class GameplayState extends GameState {
     override public function onExit():Void {
         openfl.Lib.current.removeChild(godModel.view);
     }
+
+    override public function keyUpHandler(e:KeyboardEvent):Void {
+        super.keyUpHandler(e);
+        switch e.keyCode {
+            case Keyboard.P : paused = !paused;
+        }
+    }
+
+
 }
 
 

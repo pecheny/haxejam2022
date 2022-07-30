@@ -14,6 +14,10 @@ class GameView extends Sprite {
     var model:GodModel;
     var face:MovieClip;
 
+    public function setFace(f:FaceType) {
+        face.gotoAndStop(f);
+    }
+
     public function new(m:GodModel) {
         super();
         screen = new Gameplay();
