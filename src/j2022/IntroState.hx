@@ -38,7 +38,6 @@ class IntroState extends GameState {
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        trace("KEY");
         fsm.changeState(GameStates.GAMEPLAY);
     }
 }
@@ -73,7 +72,6 @@ class WelcomeState extends GameState {
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        trace("KEY");
         fsm.changeState(GameStates.GAMEPLAY);
     }
 }
@@ -115,7 +113,6 @@ class GameOverState extends GameState {
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        trace("KEY");
         fsm.changeState(GameStates.GAMEPLAY);
     }
 }
