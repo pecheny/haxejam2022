@@ -178,63 +178,6 @@ class CloudSpawners {
         return activeCount;
     }
 }
-//class CloudSpawners {
-//    var cooldown = 120;
-//    var nextTick = 0;
-//    var randomInitializer = [];
-//    var max = 26;
-//
-//    public function reset() {
-//        nextTick = 0;
-//    }
-//
-//    public function new(c) {
-//        clouds = c;
-//        randomInitializer.push((c:Cloud) -> {
-//            c.r = 16;
-//            clouds.moveSystems[0].add(c);
-//            clouds.moveSystems[1].add(c);
-//        });
-//
-//        randomInitializer.push((c:Cloud) -> {
-//            c.r = 32;
-//            clouds.moveSystems[3].add(c);
-//        });
-//
-//        randomInitializer.push((c:Cloud) -> {
-//            c.r = 32;
-//            clouds.moveSystems[2].add(c);
-//        });
-//
-////        randomInitializer.push((c:Cloud) -> {
-////            c.r = 32;
-////            clouds.moveSystems[0].add(c);
-////        });
-//    }
-//
-//    public function update(dt) {
-//        var activeCount = clouds.clouds.length - inactiveClouds.length;
-//        if (GlobalTime.tick > nextTick && activeCount < max)
-//            spawn();
-//    }
-//
-//    function rndInit(c) {
-//        var i = Math.floor(Math.random() * (randomInitializer.length ));
-//        randomInitializer[i](c);
-//    }
-//
-//    function spawn() {
-//        var c =
-//        if (inactiveClouds.length < 1) {
-//            clouds.createCloud();
-//        } else inactiveClouds.pop();
-//
-//        rndInit(c);
-//        c.changeState(active);
-//        nextTick += cooldown;
-//
-//    }
-//}
 
 class SuicidalSpawner extends CloudSpawner {
     var round:RoundCloudMoveSystem;
@@ -366,7 +309,7 @@ class DesiresSpawner extends CloudSpawner {
             return;
         var c = spawners.getCloud();
         c.reset(Desire);
-        c.r = 16;
+        c.r = 32;
         pong.add(c);
         if (Math.random() > 0.5)
             spawners.dizzy.add(c);
@@ -393,8 +336,8 @@ class DangerSpawner extends CloudSpawner {
 
     public function new(clouds:Clouds, factory) {
         super(factory);
-        fr1 = 0;
-        fr2 = 1;
+        fr1 = 6;
+        fr2 = 6;
         var w = clouds.model.fWidth;
         var h = clouds.model.fHeight;
         hpoints = [-w / 2 * 0.66, w / 2 * 0.66];
@@ -520,8 +463,8 @@ class GameObj {
 @:enum abstract FaceType(Int) to Int {
     var face_sad = 7;
     var face_calm = 6;
-    var face_passionate = 0;
-    var face_distracted = 1;
-    var face_panic = 2;
-    var face_susp = 3;
+    var face_passionate = 1;
+    var face_distracted = 2;
+    var face_panic = 3;
+    var face_susp = 4;
 }

@@ -42,8 +42,8 @@ class Cloud extends FSM<CloudStates, Cloud> {
         return if (currentStateName == active) distraction else 0;
     }
 
-    public function getTypeW(t:DistractionType):Float {
-        return if (t == type) typeD else 0;
+    public function getTypeW():Float {
+        return typeD;
     }
 
 }

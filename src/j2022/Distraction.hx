@@ -90,8 +90,9 @@ class Distraction {
             typedDistr[k] = 0;
         for (c in model.clouds.clouds) {
             a += c.getDistrPower();
-            typedDistr[c.type] += c.getTypeW(c.typeD);
+            typedDistr[c.type] += c.getTypeW();
         }
+        trace(typedDistr);
         affection = a;
         var max = 0.;
         for (i in 0...typedDistr.length) {
