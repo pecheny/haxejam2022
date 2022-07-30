@@ -18,4 +18,35 @@ https://github.com/furusystems/SoundHX
 
 KeyPoll by Richard Lord
 
+## Assets credits
+
+### Music
+
+"Ross Bugden - Chime Chase" is is under a Creative Commons (CC BY 3.0) license.
+https://www.youtube.com/watch?v=YmJ-7toXpK4
+
+## Sounds
+
+https://freesound.org/people/FritzSounds/sounds/366478/
+
+https://freesound.org/people/Jack_Hase/sounds/350632/
+
+https://freesound.org/people/vibe_crc/sounds/51437/
+
+https://freesound.org/people/djgriffin/sounds/20289/
+
+https://freesound.org/people/omerbhatti34/sounds/521552/
+
+https://freesound.org/people/drewkelly/sounds/172003/
+
+https://freesound.org/people/PhonosUPF/sounds/496598/
+
+https://freesound.org/people/Raclure/sounds/405550/
+
+https://freesound.org/people/typeoo/sounds/521506/
+
+https://freesound.org/people/WhiteLineFever/sounds/416890/
+
+https://freesound.org/people/JavierSerrat/sounds/485065/
+
 
