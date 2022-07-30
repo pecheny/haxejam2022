@@ -1,4 +1,5 @@
 package j2022;
+import flash.text.TextField;
 import openfl.events.KeyboardEvent;
 import flash.display.DisplayObject;
 import openfl.events.MouseEvent;
@@ -79,9 +80,15 @@ class WelcomeState extends GameState {
 
 class GameOverState extends GameState {
     var view = new GameOver();
+    var score = new TextField();
 
     public function new() {
         super();
+        var t = score;
+        t.scaleY = t.scaleX = 3;
+        t.text = "" ;
+        t.textColor = 0xffffff;
+        view.addChild(score);
     }
 
     override public function update(t:Float):Void {
@@ -90,6 +97,7 @@ class GameOverState extends GameState {
 
     override public function onEnter():Void {
         super.onEnter();
+        score.text = "Your score is :" + fsm.model.score;
         openfl.Lib.current.stage.addChild(view);
     }
 

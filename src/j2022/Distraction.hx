@@ -55,6 +55,7 @@ class Distraction {
             model.view.setFace(face);
             if (enlighted()) {
 // score
+                model.score++;
             }
         }
 

@@ -21,6 +21,7 @@ class GodModel {
     public var distraction:Distraction;
     public var fsm:GameFsm;
     public var sounds:SoundSystem;
+    public var score = 0;
 
     public var fWidth = 600;
     public var fHeight = 800;
@@ -60,6 +61,7 @@ class GodModel {
         clouds.reset();
         cloudSpawner.reset();
         GlobalTime.reset();
+        score = 0;
     }
 
     public function hitTHeCloud(c:Cloud) {
@@ -116,7 +118,6 @@ class Clouds implements Updatable {
         var c = new Cloud(model);
         clouds.push(c);
         model.view.add(c.view);
-        trace("total " + clouds.length);
         return c;
     }
 
