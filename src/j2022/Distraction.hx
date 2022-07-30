@@ -43,6 +43,7 @@ class Distraction {
     }
 
     function gameOver() {
+        model.sounds.gameOver();
         model.fsm.changeState(GameStates.INTRO);
     }
 

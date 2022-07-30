@@ -20,6 +20,7 @@ class GodModel {
     public var cloudSpawner:CloudSpawner;
     public var distraction:Distraction;
     public var fsm:GameFsm;
+    public var sounds:SoundSystem;
 
     public var fWidth = 600;
     public var fHeight = 800;
@@ -31,6 +32,9 @@ class GodModel {
         cloudSpawner = new CloudSpawner(clouds);
         distraction = new Distraction(this);
         view = new GameView(this);
+
+        sounds = new SoundSystem();
+        sounds.startMusic();
 
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;
         var keys = new KeyPoll(openfl.Lib.current.stage);

@@ -53,6 +53,7 @@ class DisappearState extends CloudState {
 
     override public function onEnter():Void {
         t = 0;
+        fsm.model.sounds.cloudPff();
     }
 
     override public function onExit():Void {

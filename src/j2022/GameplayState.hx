@@ -36,6 +36,7 @@ class GameplayState extends GameState {
     }
 
     inline function stun() {
+        godModel.sounds.stun();
         stunEnd = GlobalTime.tick + 60 * 3;
     }
 
@@ -84,7 +85,7 @@ class GameplayState extends GameState {
         v.x = p.pos.x;
         v.y = p.pos.y;
     }
-
+    var wasIdle = false;
 
     function handleBullet(b:Bullet, v:BulletView) {
         var p = godModel.player;
@@ -110,12 +111,15 @@ class GameplayState extends GameState {
 
             b.speed.normalize(magn);
             playerJustHit = true;
+            godModel.sounds.ballCharHit();
 
         } else if (b.pos.y < godModel.baseline - 1) { // handle ballistics
+            wasIdle = false;
             b.pos.x += b.speed.x * dt;
             if (Math.abs(b.pos.x) > godModel.fWidth / 2) {
                 b.pos.x = Mathu.clamp(b.pos.x, -godModel.fWidth / 2, godModel.fWidth / 2);
                 b.speed.x *= -1;
+                godModel.sounds.ballWallHit();
             }
             b.speed.y += godModel.gravity * dt;
             b.pos.y += b.speed.y * dt;
@@ -123,7 +127,14 @@ class GameplayState extends GameState {
                 b.speed.y *= -1;
             if (b.pos.y > godModel.baseline) b.pos.y = godModel.baseline;
         } else { // idle
-            if (!stunned() && Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) pick(b); // check dist and pick
+            if (!wasIdle) {
+                wasIdle = true;
+                godModel.sounds.ballWallHit();
+            }
+            if (!stunned() && Math.abs(b.pos.x - p.pos.x) < (b.r + p.r)) { // check dist and pick
+                    godModel.sounds.pick();
+                    pick(b);  
+                }
         }
         v.x = b.pos.x;
         v.y = b.pos.y;
