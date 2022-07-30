@@ -1,7 +1,7 @@
 package j2022;
 import flash.ui.Keyboard;
 import openfl.events.KeyboardEvent;
-import al.al2d.Axis2D;
+import Axis2D;
 import input.Input.GameButtons;
 import j2022.GameFsm;
 import j2022.GameView;
