@@ -1,4 +1,5 @@
 package j2022;
+import flash.sampler.ClassFactory;
 import input.DummyTouch;
 import j2022.Cloud.CloudStates;
 import utils.Updatable;
@@ -17,7 +18,7 @@ class GodModel {
     public var baseline:Float;
     public var gravity = 400;
     public var clouds:Clouds;
-    public var cloudSpawner:CloudSpawner;
+    public var cloudSpawner:CloudSpawners;
     public var distraction:Distraction;
     public var fsm:GameFsm;
     public var sounds:SoundSystem;
@@ -29,7 +30,7 @@ class GodModel {
         player = new Player();
         bullet = new Bullet();
         clouds = new Clouds(this);
-        cloudSpawner = new CloudSpawner(clouds);
+        cloudSpawner = new CloudSpawners(clouds);
         distraction = new Distraction(this);
         view = new GameView(this);
 
@@ -70,7 +71,7 @@ class GodModel {
 class Clouds implements Updatable {
     public var clouds = new Array<Cloud>();
     public var moveSystems = new Array<CloudMoveSystem>();
-    var model:GodModel;
+    public var model:GodModel;
 
     public function new(m) {
         model = m;
@@ -79,8 +80,6 @@ class Clouds implements Updatable {
         round.phase = 2;
         moveSystems.push(round);
 
-        var dizzy = new DizzyMove();
-        moveSystems.push(dizzy);
 
         var pong = new PongMoveSystem();
         pong.bounds = {
@@ -140,66 +139,321 @@ class Clouds implements Updatable {
     }
 }
 
-class CloudSpawner {
+class CloudSpawners {
     public var inactiveClouds = [];
-    var cooldown = 120;
-    var nextTick = 0;
+    public var dizzy:DizzyMove;
+    var spawners:Array<CloudSpawner> = [];
     var clouds:Clouds;
-    var randomInitializer = [];
-    var max = 26;
-
-    public function reset() {
-        nextTick = 0;
-    }
 
     public function new(c) {
         clouds = c;
-        randomInitializer.push((c:Cloud) -> {
-            c.r = 16;
-            clouds.moveSystems[0].add(c);
-            clouds.moveSystems[1].add(c);
-        });
+        dizzy = new DizzyMove();
+        clouds.moveSystems.push(dizzy);
 
-        randomInitializer.push((c:Cloud) -> {
-            c.r = 32;
-            clouds.moveSystems[3].add(c);
-        });
+        spawners.push(new SuicidalSpawner(clouds, this));
+        spawners.push(new FlySpawner(clouds, this));
+//        spawners.push(new DesiresSpawner(clouds, this));
+//        spawners.push(new DangerSpawner(clouds, this));
 
-        randomInitializer.push((c:Cloud) -> {
-            c.r = 32;
-            clouds.moveSystems[2].add(c);
-        });
+    }
 
-//        randomInitializer.push((c:Cloud) -> {
-//            c.r = 32;
-//            clouds.moveSystems[0].add(c);
-//        });
+    public function getCloud():Cloud {
+        return if (inactiveClouds.length < 1) {
+            clouds.createCloud();
+        } else inactiveClouds.pop();
     }
 
     public function update(dt) {
+        for (s in spawners)
+            s.update();
+    }
+
+    public function reset() {
+        for (s in spawners)
+            s.reset();
+    }
+
+    public inline function activeCount() {
         var activeCount = clouds.clouds.length - inactiveClouds.length;
-        if (GlobalTime.tick > nextTick && activeCount < max)
+        return activeCount;
+    }
+}
+//class CloudSpawners {
+//    var cooldown = 120;
+//    var nextTick = 0;
+//    var randomInitializer = [];
+//    var max = 26;
+//
+//    public function reset() {
+//        nextTick = 0;
+//    }
+//
+//    public function new(c) {
+//        clouds = c;
+//        randomInitializer.push((c:Cloud) -> {
+//            c.r = 16;
+//            clouds.moveSystems[0].add(c);
+//            clouds.moveSystems[1].add(c);
+//        });
+//
+//        randomInitializer.push((c:Cloud) -> {
+//            c.r = 32;
+//            clouds.moveSystems[3].add(c);
+//        });
+//
+//        randomInitializer.push((c:Cloud) -> {
+//            c.r = 32;
+//            clouds.moveSystems[2].add(c);
+//        });
+//
+////        randomInitializer.push((c:Cloud) -> {
+////            c.r = 32;
+////            clouds.moveSystems[0].add(c);
+////        });
+//    }
+//
+//    public function update(dt) {
+//        var activeCount = clouds.clouds.length - inactiveClouds.length;
+//        if (GlobalTime.tick > nextTick && activeCount < max)
+//            spawn();
+//    }
+//
+//    function rndInit(c) {
+//        var i = Math.floor(Math.random() * (randomInitializer.length ));
+//        randomInitializer[i](c);
+//    }
+//
+//    function spawn() {
+//        var c =
+//        if (inactiveClouds.length < 1) {
+//            clouds.createCloud();
+//        } else inactiveClouds.pop();
+//
+//        rndInit(c);
+//        c.changeState(active);
+//        nextTick += cooldown;
+//
+//    }
+//}
+
+class SuicidalSpawner extends CloudSpawner {
+    var round:RoundCloudMoveSystem;
+    var nextSpawn:Int;
+
+    public function new(clouds:Clouds, factory) {
+        super(factory);
+        fr1 = 8;
+        fr2 = 12;
+        round = new RoundCloudMoveSystem();
+        round.center.y = -350;
+        round.phase = 2;
+        clouds.moveSystems.push(round);
+    }
+
+    override public function update() {
+        if (GlobalTime.tick > nextSpawn)
             spawn();
     }
 
-    function rndInit(c) {
-        var i = Math.floor(Math.random() * (randomInitializer.length ));
-        randomInitializer[i](c);
+    function spawn() {
+        nextSpawn += getCooldown();
+        if (round.clouds.length > 10)
+            return;
+        var c = spawners.getCloud();
+        c.reset();
+        c.r = 32;
+        c.viewId = getFr();
+        round.add(c);
+        c.changeState(active);
+    }
+
+    function getCooldown() {
+        return if (GlobalTime.tick < 20 * 60)
+            5 * 60 ;
+        else
+            10 * 60;
+    }
+
+    override public function reset() {
+        nextSpawn = 20;
+    }
+}
+
+class FlySpawner extends CloudSpawner {
+    var pong:PongMoveSystem;
+    var nextSpawn:Int;
+
+    public function new(clouds:Clouds, factory) {
+        super(factory);
+        fr1 = 12;
+        fr2 = 15;
+        pong = new PongMoveSystem();
+        var model = clouds.model;
+        pong.bounds = {
+            l:-model.fWidth / 2,
+            r:model.fWidth / 2,
+            b:0,
+            t:-model.fHeight,
+        }
+        clouds.moveSystems.push(pong);
+    }
+
+    override public function update() {
+        if (GlobalTime.tick > nextSpawn)
+            spawn();
     }
 
     function spawn() {
-        var c =
-        if (inactiveClouds.length < 1) {
-            clouds.createCloud();
-        } else inactiveClouds.pop();
-
-        rndInit(c);
+        nextSpawn += getCooldown();
+        if (pong.clouds.length > 10)
+            return;
+        var c = spawners.getCloud();
+        c.reset();
+        c.r = 16;
+        c.viewId = getFr();
+        pong.add(c);
+        if (Math.random() > 0.5)
+            spawners.dizzy.add(c);
         c.changeState(active);
-        nextTick += cooldown;
+    }
+
+    function getCooldown() {
+        return
+            if (GlobalTime.tick < 20 * 60)
+                Std.int(Math.random() * 5 * 60) ;
+            else
+                10 * 60;
+    }
+
+    override public function reset() {
+        nextSpawn = 60 * 5;
+    }
+}
+
+class DesiresSpawner extends CloudSpawner {
+    var pong:PongMoveSystem;
+    var nextSpawn:Int;
+
+    public function new(clouds:Clouds, factory) {
+        super(factory);
+        fr1 = 0;
+        fr2 = 7;
+        pong = new PongMoveSystem();
+        var model = clouds.model;
+        pong.initialSpeedProjection = axis -> {
+            return switch axis {
+                case Axis2D.horizontal: 100 + 300 * Math.random();
+                case Axis2D.vertical: 200 * Math.random();
+            }
+        }
+        pong.bounds = {
+            l:-model.fWidth / 2,
+            r:model.fWidth / 2,
+            b:0,
+            t:-model.fHeight,
+        }
+        clouds.moveSystems.push(pong);
+    }
+
+    override public function update() {
+        if (GlobalTime.tick > nextSpawn)
+            spawn();
+    }
+
+    function spawn() {
+        nextSpawn += getCooldown();
+        if (pong.clouds.length > 10)
+            return;
+        var c = spawners.getCloud();
+        c.reset();
+        c.r = 16;
+        pong.add(c);
+        if (Math.random() > 0.5)
+            spawners.dizzy.add(c);
+        c.changeState(active);
+    }
+
+    function getCooldown() {
+        return
+            if (GlobalTime.tick < 20 * 60)
+                Std.int(Math.random() * 5 * 60) ;
+            else
+                10 * 60;
+    }
+
+    override public function reset() {
+        nextSpawn = 60 * 5;
+    }
+}
+class DangerSpawner extends CloudSpawner {
+    var origins = new CloudMoveSystemBase();
+    var nextSpawn:Int;
+    var hpoints:Array<Float>;
+    var vpoints:Array<Float>;
+
+    public function new(clouds:Clouds, factory) {
+        super(factory);
+        fr1 = 0;
+        fr2 = 1;
+        var w = clouds.model.fWidth;
+        var h = clouds.model.fHeight;
+        hpoints = [-w / 2 * 0.66, w / 2 * 0.66];
+        vpoints = [-h * 0.75];
+        trace("h: " + vpoints);
 
     }
 
+    override public function update() {
+        if (GlobalTime.tick > nextSpawn)
+            spawn();
+    }
 
+    function spawn() {
+        nextSpawn += getCooldown();
+        var c = spawners.getCloud();
+        c.reset();
+        c.r = 40;
+//        trace(vpoints[Math.floor(Math.random() * vpoints.length)]);
+        c.pos.x = hpoints[Math.floor(Math.random() * hpoints.length)];
+        c.pos.y = vpoints[Math.floor(Math.random() * vpoints.length)];
+        trace(c.pos);
+        origins.add(c);
+        var ofs = c.offsets[origins];
+        ofs.x = c.pos.x;
+        ofs.y = c.pos.y;
+        spawners.dizzy.add(c);
+        c.changeState(active);
+    }
+
+    function getCooldown() {
+        return
+            if (GlobalTime.tick < 20 * 60)
+                Std.int(Math.random() * 5 * 60) ;
+            else
+                10 * 60;
+    }
+
+    override public function reset() {
+        nextSpawn = 60 * 5;
+    }
+}
+
+class CloudSpawner {
+    var spawners:CloudSpawners;
+    var fr1:Int = 0;
+    var fr2:Int = 0;
+
+    public function new(fac) {
+        this.spawners = fac;
+    }
+
+    public function update() {}
+
+    public function reset() {}
+
+    function getFr() {
+        return fr1 + Math.floor(Math.random() * (fr2 - fr1));
+    }
 }
 
 

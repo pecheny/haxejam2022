@@ -6,7 +6,7 @@ class CloudMove {
 }
 
 class CloudMoveSystemBase implements CloudMoveSystem {
-    var clouds:Array<Cloud> = [];
+    public var clouds:Array<Cloud> = [];
 
     public function new() {}
 
@@ -78,6 +78,10 @@ class RoundCloudMoveSystem extends CloudMoveSystemBase implements CloudMoveSyste
 class PongMoveSystem extends CloudMoveSystemBase {
     public var bounds:Bounds;
 
+    public dynamic function initialSpeedProjection(axis) {
+        return Math.random() * 100;
+    }
+
     override public function update(dt:Float):Void {
         for (c in clouds) {
             var pv:PosWithVel = cast c.offsets[this];
@@ -97,8 +101,8 @@ class PongMoveSystem extends CloudMoveSystemBase {
         var w = 500;
         pv.x = Math.random() * w - w / 2;
         pv.y = -Math.random() * 300 - 100;
-        pv.vel.x = Math.random() * 100;
-        pv.vel.y = Math.random() * 100;
+        pv.vel.x = initialSpeedProjection(Axis2D.horizontal);
+        pv.vel.y = initialSpeedProjection(Axis2D.vertical);
         c.pos.x += pv.x;
         c.pos.y += pv.y;
     }
