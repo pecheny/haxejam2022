@@ -7,7 +7,7 @@
     <app main="j2022.Main" path="${builds_folder}/Export" file="j2022"/>
 
     <window antialiasing="4"/>
-    <window background="#303030" fps="60" width="640" height="960" />
+    <window background="#f0f0f0" fps="60" width="640" height="960" />
 <!--    <window background="#303030" fps="60"  if="html5"/>-->
     <source path="src"/>
 

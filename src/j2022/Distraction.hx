@@ -52,7 +52,6 @@ class Distraction {
                     case DistractionType.Toilet: face_panic;
                 }
             }
-            trace (face  + " " + distrType  + " " + distraction);
             model.view.setFace(face);
             if (enlighted()) {
 // score
@@ -92,7 +91,6 @@ class Distraction {
             a += c.getDistrPower();
             typedDistr[c.type] += c.getTypeW();
         }
-        trace(typedDistr);
         affection = a;
         var max = 0.;
         for (i in 0...typedDistr.length) {
@@ -104,6 +102,7 @@ class Distraction {
     }
 
     public function reset() {
+        model.view.setFace(face_sad);
         distraction = 50;
         gameoverCounter = 0;
         model.view.distraction.view.y -= offset;

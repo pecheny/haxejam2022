@@ -6,10 +6,27 @@ class SoundSystem {
     public function new() {
 
         addSound("ChimeChase.mp3");
-        addSound(TEST);
+        addSound(BALL_FALL);
+        addSound(WALL_HIT);
+        addSound(CHAR_HIT);
+        addSound(CLOUD_PF);
+        addSound(STUN);
+        addSound(PICK);
+//        addSound(START);
+        addSound(OVER);
     }
 
     inline static var TEST = "flaunch.wav";
+
+    inline static var BALL_FALL:String =         #if flash "flaunch.wav" #else "416890__whitelinefever__hammer-hitting-a-head.wav"#end;
+    inline static var WALL_HIT:String =           "405550__raclure__stiff-wooden-tap.wav";
+    inline static var CHAR_HIT:String =           "521552__omerbhatti34__arrow-impact.mp3";
+    inline static var CLOUD_PF:String =           "521506__typeoo__air-hiss-cola.wav";
+//    inline static var PANIC:String =              "";
+    inline static var STUN:String =               "172003__drewkelly__smash-and-grunt.wav";
+    inline static var PICK:String =              #if flash "flaunch.wav" #else  "51437__vibe-crc__keys-catched.wav"#end;
+    inline static var START:String =              "20289__djgriffin__om-gate-gate-paragate-parasamgate-bodhi-ye-swaha.aiff";
+    inline static var OVER:String =               "496598__phonosupf__rattle.wav";
 
     var sounds:Map<String, Sound> = new Map<String, Sound>();
 
@@ -22,43 +39,43 @@ class SoundSystem {
 
     public function startMusic():Void {
 //		SoundHX.fadeAllTo(0);
-//        playLoop("ChimeChase.mp3", 1);
+        playLoop("ChimeChase.mp3", 5);
     }
 
     public function ballWallHit() {
-        playFx(TEST);
+        playFx(WALL_HIT);
     }
 
 
     public function ballFall() {
-        playFx(TEST);
+        playFx(BALL_FALL);
     }
 
     public function ballCharHit() {
-        playFx(TEST);
+        playFx(CHAR_HIT);
     }
 
     public function cloudPff() {
-        playFx(TEST);
+        playFx(CLOUD_PF);
     }
 
     public function panic() {
-        playFx(TEST);
+//        playFx(PANIC);
     }
 
     public function gStart() {
-        playFx(TEST);
+//        playFx(START);
     }
 
     public function stun() {
-        playFx(TEST);
+        playFx(STUN);
     }
 
     public function pick() {
-        playFx(TEST);
+        playFx(PICK);
     }
     public function gameOver() {
-        playFx(TEST);
+        playFx(OVER);
     }
 
 

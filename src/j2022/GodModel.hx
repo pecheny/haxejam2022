@@ -1,5 +1,4 @@
 package j2022;
-import flash.sampler.ClassFactory;
 import input.DummyTouch;
 import j2022.Cloud.CloudStates;
 import utils.Updatable;
@@ -309,6 +308,7 @@ class DesiresSpawner extends CloudSpawner {
             return;
         var c = spawners.getCloud();
         c.reset(Desire);
+        c.viewId = getFr();
         c.r = 32;
         pong.add(c);
         if (Math.random() > 0.5)
@@ -321,11 +321,11 @@ class DesiresSpawner extends CloudSpawner {
             if (GlobalTime.tick < 20 * 60)
                 Std.int(Math.random() * 5 * 60) ;
             else
-                10 * 60;
+                5 * 60;
     }
 
     override public function reset() {
-        nextSpawn = 60 * 5;
+        nextSpawn = 60 * 15;
     }
 }
 class DangerSpawner extends CloudSpawner {
@@ -336,13 +336,12 @@ class DangerSpawner extends CloudSpawner {
 
     public function new(clouds:Clouds, factory) {
         super(factory);
-        fr1 = 6;
-        fr2 = 6;
+        fr1 = 7;
+        fr2 = 7;
         var w = clouds.model.fWidth;
         var h = clouds.model.fHeight;
         hpoints = [-w / 2 * 0.66, w / 2 * 0.66];
         vpoints = [-h * 0.75];
-        trace("h: " + vpoints);
 
     }
 
@@ -356,10 +355,12 @@ class DangerSpawner extends CloudSpawner {
         var c = spawners.getCloud();
         c.reset(Toilet);
         c.r = 40;
+        c.distraction = 10;
 //        trace(vpoints[Math.floor(Math.random() * vpoints.length)]);
         c.pos.x = hpoints[Math.floor(Math.random() * hpoints.length)];
         c.pos.y = vpoints[Math.floor(Math.random() * vpoints.length)];
         origins.add(c);
+        c.viewId = getFr();
         var ofs = c.offsets[origins];
         ofs.x = c.pos.x;
         ofs.y = c.pos.y;
@@ -369,14 +370,11 @@ class DangerSpawner extends CloudSpawner {
 
     function getCooldown() {
         return
-            if (GlobalTime.tick < 20 * 60)
-                Std.int(Math.random() * 5 * 60) ;
-            else
-                10 * 60;
+            15 * 60 + Std.int(Math.random() * 15 * 60) ;
     }
 
     override public function reset() {
-        nextSpawn = 60 * 5;
+        nextSpawn = 60 * 50;
     }
 }
 

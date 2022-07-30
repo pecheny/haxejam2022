@@ -170,6 +170,7 @@ class GameplayState extends GameState {
 
     override public function onExit():Void {
         openfl.Lib.current.removeChild(godModel.view);
+        godModel.sounds.startMusic();
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
