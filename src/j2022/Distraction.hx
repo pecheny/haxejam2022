@@ -108,6 +108,7 @@ class Distraction {
         gameoverCounter = 0;
         model.view.distraction.view.y -= offset;
         offset = 0;
+        distrType = DistractionType.Suicidal;
         model.view.distraction.setValue(distraction / maxDistraction);
     }
 }
