@@ -1,14 +1,14 @@
 package j2022;
-import input.DummyTouch;
-import j2022.Cloud.CloudStates;
-import utils.Updatable;
-import input.GamepadInput;
 import flash.ui.Keyboard;
+import input.GamepadInput;
+import input.Input;
 import input.KeyboardInput;
 import input.MetaInput;
-import utils.KeyPoll;
-import input.Input;
+import input.TouchInput;
+import j2022.Cloud.CloudStates;
 import j2022.CloudMove;
+import utils.KeyPoll;
+import utils.Updatable;
 class GodModel {
     public var view:GameView;
     public var player:Player;
@@ -48,7 +48,7 @@ class GodModel {
                 down:Keyboard.DOWN,
             }, keys, [GameButtons.jump => Keyboard.SPACE ]))
         .add(new GamepadInput(GamepadAxis.LEFT_X, GamepadAxis.LEFT_Y, [ GameButtons.jump => GamepadButton.A ]))
-        .add(new DummyTouch(this));
+        .add(new TouchInput(view));
     }
 
     public function reset() {
@@ -164,6 +164,7 @@ class CloudSpawners {
     }
 
     public function update(dt) {
+        return;
         for (s in spawners)
             s.update();
     }
