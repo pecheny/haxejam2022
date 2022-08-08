@@ -164,7 +164,6 @@ class CloudSpawners {
     }
 
     public function update(dt) {
-        return;
         for (s in spawners)
             s.update();
     }
