@@ -1,0 +1,29 @@
+* Lose them all
+
+** Tech
+*** Liquid layout
+*** Settings
+- sound
+- onscren
+*** Storage/ highscores
+*** msdf fonts
+*** focus handling
+*** profiling / fps
+*** [ ] crash/log backend
+*** wrap update into try/catch
+** Bugs
+*** [ ] null sound
+*** [ ] cloud flashes in browser
+*** [ ] input issue (gui doesnt respond)
+** Feat
+*** [ ] gameover ui cooldown
+*** ачивки
+** Tuning
+*** размер чувака
+*** веса дистракшна и появления
+*** паттерны движения
+** Art
+*** haxe logo
+*** ball
+*** main char and faces
+*** puddle anim
