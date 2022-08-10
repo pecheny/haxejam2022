@@ -151,7 +151,7 @@ class CloudView extends Sprite {
         setPos();
     }
 
-    var cloud_f1 = 7;
+    var cloud_f1 = 0;
 
     public function drawActive() {
         icon.visible = true;
@@ -168,7 +168,7 @@ class CloudView extends Sprite {
     public function drawDisappear(t:Float) {
         icon.visible = false;
         var totalFrames = 4;
-        var startFrame = 11;// 4;
+        var startFrame = 3;// 4;
         var frame = startFrame + Math.floor(t * totalFrames);
         asset.gotoAndPlay(frame);
         setPos();
