@@ -22,7 +22,7 @@ class GodModel {
     public var fsm:GameFsm;
     public var sounds:SoundSystem;
     public var score = 0;
-
+    public var stunEnd = 0;
     public var fWidth = 600;
     public var fHeight = 800;
 
@@ -62,6 +62,7 @@ class GodModel {
         cloudSpawner.reset();
         GlobalTime.reset();
         score = 0;
+        stunEnd = 0;
     }
 
     public function hitTHeCloud(c:Cloud) {

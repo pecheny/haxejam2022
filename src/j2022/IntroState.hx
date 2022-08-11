@@ -10,7 +10,7 @@ class IntroState extends GameState {
 
     public function new() {
         super();
-        view.introFinished.listen(()->fsm.changeState(GAMEPLAY));
+        view.introFinished.listen(()->fsm.startGame());
     }
 
     override public function update(t:Float):Void {
@@ -31,14 +31,13 @@ class IntroState extends GameState {
     override public function mouseDownHandler(e:MouseEvent):Void {
 
         var target:DisplayObject = e.target;
-        trace(target.name);
         switch target.name {
-            case "_play": fsm.changeState(GameStates.GAMEPLAY);
+            case "_play": fsm.startGame();
         }
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        fsm.changeState(GameStates.GAMEPLAY);
+        fsm.startGame();
     }
 }
 class WelcomeState extends GameState {
@@ -72,7 +71,7 @@ class WelcomeState extends GameState {
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        fsm.changeState(GameStates.GAMEPLAY);
+        fsm.startGame();
     }
 }
 
@@ -108,11 +107,11 @@ class GameOverState extends GameState {
         var target:DisplayObject = e.target;
         trace(target.name);
         switch target.name {
-            case "_play": fsm.changeState(GameStates.GAMEPLAY);
+            case "_play": fsm.startGame();
         }
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        fsm.changeState(GameStates.GAMEPLAY);
+        fsm.startGame();
     }
 }

@@ -28,6 +28,11 @@ class GameFsm extends FSM<GameStates, GameFsm> {
     public function keyUpHandler(e) {
         getCurrentState().keyUpHandler(e);
     }
+
+    public function startGame() {
+        model.reset();
+        changeState(GAMEPLAY);
+    }
 }
 
 @:enum abstract GameStates(String) to String {

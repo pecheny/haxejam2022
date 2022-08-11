@@ -14,7 +14,6 @@ class GameplayState extends GameState {
     var maxBVertSpd = 1000;
     var acc = 1700;
     var openingDur = 1.;
-    var stunEnd = 0;
     var paused = false;
 
     override public function update(t:Float):Void {
@@ -37,12 +36,12 @@ class GameplayState extends GameState {
 
 
     inline function stunned() {
-        return stunEnd > GlobalTime.tick;
+        return godModel.stunEnd > GlobalTime.tick;
     }
 
     inline function stun() {
         godModel.sounds.stun();
-        stunEnd = GlobalTime.tick + 60 * 3;
+        godModel.stunEnd = GlobalTime.tick + 60 * 3;
     }
 
     var playerJustHit = false;
@@ -168,7 +167,6 @@ class GameplayState extends GameState {
         openfl.Lib.current.addChild(godModel.view);
 //        var player = GodModel.instance.view.player;
         godModel.reset();
-        stunEnd = 0;
     }
 
     override public function onExit():Void {
