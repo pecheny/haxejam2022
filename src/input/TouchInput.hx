@@ -7,6 +7,7 @@ import openfl.events.EventDispatcher;
 import fsm.State;
 import fsm.FSM;
 import input.Input.GameButtons;
+@:keep
 class TouchInput implements Input extends FSM<TouchStates, TouchInput> {
     var source:EventDispatcher;
     public var targetName(default, null) = "";
@@ -30,6 +31,7 @@ class TouchInput implements Input extends FSM<TouchStates, TouchInput> {
 
     function onDown(e:Event) {
         var trg:DisplayObject = e.target;
+//        trace(trg.name);
         targetName = trg.name;
         changeState(Pressed);
     }
@@ -62,6 +64,7 @@ class TouchInput implements Input extends FSM<TouchStates, TouchInput> {
     var Pressed = "Pressed";
     var Free = "Free";
 }
+@:keep
 class TouchState extends State<TouchStates, TouchInput> {
     public function new() {}
 
@@ -73,7 +76,7 @@ class TouchState extends State<TouchStates, TouchInput> {
         return false;
     }
 }
-
+@:keep
 class PressedState extends TouchState {
 
     override public function getDirProjection(axis:Axis2D):Float {
