@@ -18,15 +18,15 @@ class SoundSystem {
 
     inline static var TEST = "flaunch.wav";
 
-    inline static var BALL_FALL:String =         #if flash "flaunch.wav" #else "416890__whitelinefever__hammer-hitting-a-head.wav"#end;
-    inline static var WALL_HIT:String =           "405550__raclure__stiff-wooden-tap.wav";
-    inline static var CHAR_HIT:String =           "521552__omerbhatti34__arrow-impact.mp3";
-    inline static var CLOUD_PF:String =           "521506__typeoo__air-hiss-cola.wav";
+    inline static var BALL_FALL:String = #if flash "flaunch.wav" #else "416890__whitelinefever__hammer-hitting-a-head.wav"#end;
+    inline static var WALL_HIT:String = "405550__raclure__stiff-wooden-tap.wav";
+    inline static var CHAR_HIT:String = "521552__omerbhatti34__arrow-impact.mp3";
+    inline static var CLOUD_PF:String = "521506__typeoo__air-hiss-cola.wav";
 //    inline static var PANIC:String =              "";
-    inline static var STUN:String =               "172003__drewkelly__smash-and-grunt.wav";
-    inline static var PICK:String =              #if flash "flaunch.wav" #else  "51437__vibe-crc__keys-catched.wav"#end;
-    inline static var START:String =              "20289__djgriffin__om-gate-gate-paragate-parasamgate-bodhi-ye-swaha.aiff";
-    inline static var OVER:String =               "496598__phonosupf__rattle.wav";
+    inline static var STUN:String = "172003__drewkelly__smash-and-grunt.wav";
+    inline static var PICK:String = #if flash "flaunch.wav" #else "51437__vibe-crc__keys-catched.wav"#end;
+    inline static var START:String = "20289__djgriffin__om-gate-gate-paragate-parasamgate-bodhi-ye-swaha.aiff";
+    inline static var OVER:String = "496598__phonosupf__rattle.wav";
 
     var sounds:Map<String, Sound> = new Map<String, Sound>();
 
@@ -36,6 +36,14 @@ class SoundSystem {
         SoundHX.addSound(name, snd);
     }
 
+
+    public function pause() {
+        SoundHX.pauseAll();
+    }
+
+    public function resume() {
+        SoundHX.resumeAll();
+    }
 
     public function startMusic():Void {
 //		SoundHX.fadeAllTo(0);
@@ -74,6 +82,7 @@ class SoundSystem {
     public function pick() {
         playFx(PICK);
     }
+
     public function gameOver() {
         playFx(OVER);
     }
@@ -87,7 +96,11 @@ class SoundSystem {
         SoundHX.stop(alias);
     }
 
-    function playFx(alias:String) {
-        SoundHX.playFx(alias);
+    function playFx(alias:String, multi = false) {
+        SoundHX.play(alias, 1, 0, 1, multi);
+        try {
+        } catch (e:Dynamic) {
+            trace("Error! : " + e);
+        }
     }
 }

@@ -67,7 +67,6 @@ package treefortress.sound;
 		 * @param allowMultiple Allow multiple concurrent instances of this Sound
 		 */
 		public function play(volume:Float = 1, startTime:Float = 0, loops:Int = 0, allowMultiple:Bool = true):SoundInstance {
-			
 			this.loops = loops;
 			this.allowMultiple = allowMultiple;
 			if(allowMultiple){
@@ -79,6 +78,8 @@ package treefortress.sound;
 				}
  				channel = sound.play(startTime, loops == -1? 0 : loops);
 			}
+			if (channel == null)
+				return null;
 			channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			this.volume = volume;
 			this.mute = mute;
