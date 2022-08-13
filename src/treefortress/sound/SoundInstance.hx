@@ -6,51 +6,51 @@ package treefortress.sound;
 	import openfl.media.SoundChannel;
 	import openfl.media.SoundTransform;
 	import openfl.utils.ByteArray;
-	
+
 	class SoundInstance {
-		
-		
+
+
 		/**
 		 * Registered type for this Sound
 		 */
 		public var type:String;
-		
+
 		/**
 		 * URL this sound was loaded from. This is null if the sound was not loaded externally.
 		 */
 		public var url:String;
-		
+
 		/**
 		 * Current instance of Sound object
 		 */
 		public var sound:Sound;
-		
+
 		/**
 		 * Current playback channel
 		 */
 		public var channel:SoundChannel;
-		
+
 		/**
 		 * Dispatched when playback has completed
 		 */
 		public var soundCompleted:Signal<SoundInstance>;
-		
+
 		/**
 		 * Number of times to loop this sound. Pass -1 to loop forever.
 		 */
 		public var loops:Int;
-		
+
 		/**
 		 * Allow multiple concurrent instances of this Sound. If false, only one instance of this sound will ever play.
 		 */
 		public var allowMultiple:Bool;
-		
-		
+
+
 		var pauseTime:Float;
-		
+
 		var soundTransform:SoundTransform;
 		var currentTween:SoundTween;
-		
+
 		public function new(sound:Sound = null){
 			this.sound = sound;
 			pauseTime = 0;
@@ -58,7 +58,7 @@ package treefortress.sound;
 			soundCompleted = new Signal<SoundInstance>();
 			soundTransform = new SoundTransform();
 		}
-		
+
 		/**
 		 * Play this Sound 
 		 * @param volume
@@ -72,7 +72,7 @@ package treefortress.sound;
 			if(allowMultiple){
 				channel = sound.play(startTime, loops);
 			} else {
-				if(channel!=null){ 
+				if(channel!=null){
 					pauseTime = channel.position;
 					stopChannel(channel);
 				}
@@ -85,7 +85,7 @@ package treefortress.sound;
 			this.mute = mute;
 			return this;
 		}
-		
+
 		/**
 		 * Pause currently playing sound. Use resume() to continue playback.
 		 */
@@ -96,15 +96,15 @@ package treefortress.sound;
 			return this;
 		}
 
-		
-		/**
-		 * Resume from previously paused time, or start over if it's not playing.
-		 */
+
+
 		public function resume():SoundInstance {
+			if (pauseTime == 0)
+				return this;
 			play(volume, pauseTime, loops, allowMultiple);
 			return this;
 		}
-		
+
 		/**
 		 * Stop the currently playing sound and set it's position to 0
 		 */
@@ -113,7 +113,7 @@ package treefortress.sound;
 			channel.stop();
 			return this;
 		}
-		
+
 		/**
 		 * Mute current sound.
 		 */
@@ -125,7 +125,7 @@ package treefortress.sound;
 			}
 			return mute;
 		}
-		
+
 		/**
 		 * Fade using the current volume as the Start Volume
 		 */
@@ -133,7 +133,7 @@ package treefortress.sound;
 			currentTween = SoundHX.addTween(type, -1, endVolume, duration);
 			return this;
 		}
-		
+
 		/**
 		 * Fade and specify both the Start Volume and End Volume.
 		 */
@@ -141,7 +141,7 @@ package treefortress.sound;
 			currentTween = SoundHX.addTween(type, startVolume, endVolume, duration);
 			return this;
 		}
-		
+
 		/**
 		 * Indicates whether this sound is currently playing.
 		 */
@@ -149,25 +149,25 @@ package treefortress.sound;
 		function get_isPlaying():Bool {
 			return (channel!=null && channel.position > 0);
 		}
-		
+
 		/**
 		 * Set position of sound in milliseconds
 		 */
 		public var position(get, set):Float;
 		function get_position():Float { return channel != null ? channel.position : 0; }
 		function set_position(value:Float):Float {
-			if(channel!=null){ 
+			if(channel!=null){
 				stopChannel(channel);
 			}
 			channel = sound.play(value, loops);
 			channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			return value;
 		}
-		
+
 		public var normalizedPosition(get, set):Float;
 		function get_normalizedPosition():Float { return channel != null ? channel.position / sound.length : 0; }
 		function set_normalizedPosition(value:Float) {
-			if(channel!=null){ 
+			if(channel!=null){
 				stopChannel(channel);
 			}
 			value *= sound.length;
@@ -175,7 +175,7 @@ package treefortress.sound;
 			channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			return value;
 		}
-		
+
 
 		/**
 		 * Value between 0 and 1. You can call this while muted to change volume, and it will not break the mute.
@@ -194,7 +194,7 @@ package treefortress.sound;
 			}
 			return volume;
 		}
-		
+
 		/**
 		 * Sets the master volume, which is multiplied with the current Volume level
 		 */
@@ -216,7 +216,7 @@ package treefortress.sound;
 			return si;
 		}
 
-		
+
 		/**
 		 * Dispatched when Sound has finished playback
 		 */
@@ -226,7 +226,7 @@ package treefortress.sound;
 				play(volume, 0, -1, allowMultiple);
 			}
 		}
-		
+
 		/**
 		 * Unload sound from memory.
 		 */
@@ -240,7 +240,7 @@ package treefortress.sound;
 			stopChannel(channel);
 			endFade();
 		}
-		
+
 		/**
 		 * Ends the current tween for this sound if it has one.
 		 */
@@ -250,19 +250,19 @@ package treefortress.sound;
 			currentTween = null;
 			return this;
 		}
-		
+
 		function stopChannel(channel:SoundChannel):Void {
 			if(channel==null){ return; }
 			channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			try {
-				channel.stop(); 
+				channel.stop();
 			} catch(e:Error){};
-		}		
-		
+		}
+
 		/**
 		 * Get the samples of the sound as 44.1 kHz as 32-bit floating-point
 		 * @return
-		 */		
+		 */
 		public function getBytes():ByteArray
 		{
 			throw "N/a";
@@ -271,5 +271,5 @@ package treefortress.sound;
 //			sound.b
 //			return bytes;
 		}
-		
+
 	}

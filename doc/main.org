@@ -7,23 +7,35 @@
 - onscren
 *** Storage/ highscores
 *** msdf fonts
-*** focus handling
+*** [ ] focus handling
 *** profiling / fps
-*** [ ] crash/log backend
+*** [X] crash/log backend
+*** [?] verion of the build in stats
 *** wrap update into try/catch
+*** android build (+flurry)
+*** test nme
+*** bitmaps optimization
 ** Bugs
-*** [ ] null sound
-*** [ ] cloud flashes in browser
-*** [ ] input issue (gui doesnt respond)
+*** [X] null sound
+*** [X] cloud flashes in browser
+*** [X] input issue (gui doesnt respond)
+*** [ ] channel.pos == 0 why(?)
+*** [ ] прочекать совместимость звуков и платформ
 ** Feat
 *** [ ] gameover ui cooldown
+*** [ ] dupe throw on up key
+*** [ ] start game with throw button only
 *** ачивки
 ** Tuning
 *** размер чувака
 *** веса дистракшна и появления
 *** паттерны движения
 ** Art
+*** [ ] desire icons (?)
 *** haxe logo
 *** ball
 *** main char and faces
 *** puddle anim
+*** small beach
+** Gameplay
+*** core: stimulate and easy bounsing

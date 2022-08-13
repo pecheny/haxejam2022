@@ -5,7 +5,7 @@ import openfl.media.Sound;
 class SoundSystem {
     public function new() {
 
-        addSound("ChimeChase.mp3");
+        addSound(MUSIC);
         addSound(BALL_FALL);
         addSound(WALL_HIT);
         addSound(CHAR_HIT);
@@ -28,6 +28,8 @@ class SoundSystem {
     inline static var START:String = "20289__djgriffin__om-gate-gate-paragate-parasamgate-bodhi-ye-swaha.aiff";
     inline static var OVER:String = "496598__phonosupf__rattle.wav";
 
+    inline static var MUSIC = "ChimeChase.mp3";
+
     var sounds:Map<String, Sound> = new Map<String, Sound>();
 
     public function addSound(name:String):Void {
@@ -47,7 +49,7 @@ class SoundSystem {
 
     public function startMusic():Void {
 //		SoundHX.fadeAllTo(0);
-        playLoop("ChimeChase.mp3", 5);
+        playLoop(MUSIC);
     }
 
     public function ballWallHit() {
@@ -88,8 +90,8 @@ class SoundSystem {
     }
 
 
-    function playLoop(alias:String, n:Int) {
-        SoundHX.play(alias, n);
+    function playLoop(alias:String) {
+        SoundHX.play(alias, 1, 0, -1, false);
     }
 
     function stop(alias:String) {

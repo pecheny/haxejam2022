@@ -1,11 +1,12 @@
 package j2022;
-import flash.ui.Keyboard;
-import openfl.events.KeyboardEvent;
 import Axis2D;
+import flash.ui.Keyboard;
 import input.Input.GameButtons;
 import j2022.GameFsm;
 import j2022.GameView;
 import j2022.GodModel;
+import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import utils.Mathu;
 class GameplayState extends GameState {
     var godModel:GodModel;
@@ -165,19 +166,16 @@ class GameplayState extends GameState {
     override public function onEnter():Void {
         godModel = fsm.model;
         openfl.Lib.current.addChild(godModel.view);
-//        var player = GodModel.instance.view.player;
-        godModel.reset();
     }
 
     override public function onExit():Void {
         openfl.Lib.current.removeChild(godModel.view);
-        godModel.sounds.startMusic();
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
         super.keyUpHandler(e);
         switch e.keyCode {
-            case Keyboard.P : paused = !paused;
+            case Keyboard.P : fsm.changeState(PAUSED);
         }
     }
 
@@ -185,3 +183,26 @@ class GameplayState extends GameState {
 }
 
 
+class PausedState extends GameState {
+
+    override public function keyUpHandler(e:KeyboardEvent):Void {
+        super.keyUpHandler(e);
+        switch e.keyCode {
+            case Keyboard.P : fsm.changeState(GAMEPLAY);
+        }
+    }
+
+    override public function onEnter():Void {
+        openfl.Lib.current.addChild(fsm.model.view);
+        fsm.model.sounds.pause();
+    }
+
+    override public function onExit():Void {
+        openfl.Lib.current.removeChild(fsm.model.view);
+        fsm.model.sounds.resume();
+    }
+
+    override public function mouseDownHandler(e:MouseEvent):Void {
+        super.mouseDownHandler(e);
+    }
+}
