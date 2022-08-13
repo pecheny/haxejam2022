@@ -48,8 +48,11 @@ class SoundSystem {
     }
 
     public function startMusic():Void {
-//		SoundHX.fadeAllTo(0);
         playLoop(MUSIC);
+    }
+
+    public function stopMusic() {
+        SoundHX.stop(MUSIC);
     }
 
     public function ballWallHit() {

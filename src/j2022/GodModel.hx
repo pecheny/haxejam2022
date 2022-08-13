@@ -35,7 +35,6 @@ class GodModel {
         view = new GameView(this);
 
         sounds = new SoundSystem();
-        sounds.startMusic();
 
         baseline = 0;//openfl.Lib.current.stage.stageHeight - 30;
         var keys = new KeyPoll(openfl.Lib.current.stage);

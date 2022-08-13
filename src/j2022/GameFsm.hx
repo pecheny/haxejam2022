@@ -33,6 +33,7 @@ class GameFsm extends FSM<GameStates, GameFsm> {
 
     public function startGame() {
         model.reset();
+        model.sounds.startMusic();
         changeState(GAMEPLAY);
     }
 }
