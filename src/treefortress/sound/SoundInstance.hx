@@ -110,7 +110,8 @@ package treefortress.sound;
 		 */
 		public function stop():SoundInstance {
 			pauseTime = 0;
-			channel.stop();
+			if (channel!=null)
+                channel.stop();
 			return this;
 		}
 
