@@ -1,16 +1,16 @@
 package j2022;
-import flash.text.TextField;
-import openfl.events.KeyboardEvent;
 import flash.display.DisplayObject;
-import openfl.events.MouseEvent;
-import j2022.ui.IntroScreen;
+import flash.text.TextField;
 import j2022.GameFsm;
+import j2022.ui.IntroScreen;
+import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 class IntroState extends GameState {
     var view = new IntroScreen();
 
     public function new() {
         super();
-        view.introFinished.listen(()->fsm.startGame());
+        view.introFinished.listen(() -> fsm.startGame());
     }
 
     override public function update(t:Float):Void {
@@ -78,6 +78,7 @@ class WelcomeState extends GameState {
 class GameOverState extends GameState {
     var view = new GameOver();
     var score = new TextField();
+    var time = 0.;
 
     public function new() {
         super();
@@ -89,11 +90,18 @@ class GameOverState extends GameState {
     }
 
     override public function update(t:Float):Void {
-        super.update(t);
+        time += t;
+    }
+
+    function startGame() {
+        if (time < 1)
+            return;
+        fsm.startGame();
     }
 
     override public function onEnter():Void {
         super.onEnter();
+        time = 0;
         score.text = "Your score is :" + fsm.model.score;
         openfl.Lib.current.stage.addChild(view);
         fsm.model.sounds.stopMusic();
@@ -108,11 +116,11 @@ class GameOverState extends GameState {
         var target:DisplayObject = e.target;
         trace(target.name);
         switch target.name {
-            case "_play": fsm.startGame();
+            case "_play": startGame();
         }
     }
 
     override public function keyUpHandler(e:KeyboardEvent):Void {
-        fsm.startGame();
+        startGame();
     }
 }
