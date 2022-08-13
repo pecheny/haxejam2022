@@ -101,7 +101,7 @@ class GameplayState extends GameState {
         if (p.bullet == b) { // bullet is carried by player
             b.pos.x = p.pos.x;
             b.pos.y = p.pos.y - 10;
-            if (i.pressed(GameButtons.jump)) lauch(b);
+            if (i.pressed(GameButtons.jump) || i.getDirProjection(vertical) < -0.5) lauch(b);
         } else if (dst < thld && b.speed.y > 0 && !stunned()) { // handle player hit
             // ===  speed reverse
 //            b.speed.x *= -1;
