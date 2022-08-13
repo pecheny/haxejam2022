@@ -96,6 +96,7 @@ class GameOverState extends GameState {
         super.onEnter();
         score.text = "Your score is :" + fsm.model.score;
         openfl.Lib.current.stage.addChild(view);
+        fsm.model.sounds.stopMusic();
     }
 
     override public function onExit():Void {
