@@ -19,10 +19,10 @@
 *** [X] null sound
 *** [X] cloud flashes in browser
 *** [X] input issue (gui doesnt respond)
-*** [ ] channel.pos == 0 why(?)
+*** [X] channel.pos == 0 why(?)
 *** [ ] прочекать совместимость звуков и платформ
 ** Feat
-*** [ ] gameover ui cooldown
+*** [X] gameover ui cooldown
 *** [ ] dupe throw on up key
 *** [ ] start game with throw button only
 *** ачивки
@@ -35,6 +35,8 @@
 *** haxe logo
 *** ball
 *** main char and faces
+**** delight
+**** stress shake
 *** puddle anim
 *** small beach
 ** Gameplay
