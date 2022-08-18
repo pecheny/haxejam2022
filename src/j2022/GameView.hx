@@ -10,6 +10,7 @@ class GameView extends Sprite {
     public var distraction:DistractionView;
     public var canvas = new Sprite();
     public var curtain:Sprite;
+    public var pause:MovieClip;
     var screen:Sprite;
     var model:GodModel;
     var face:MovieClip;
@@ -26,6 +27,8 @@ class GameView extends Sprite {
         addChild(screen);
 
         curtain = cast screen.getChildByName("_curtain");
+        pause = cast screen.getChildByName("_pause");
+        pause.stop();
 
         face = cast screen.getChildByName("_face");
         face.stop();

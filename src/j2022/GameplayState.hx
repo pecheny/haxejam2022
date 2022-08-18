@@ -1,4 +1,5 @@
 package j2022;
+import flash.display.DisplayObject;
 import Axis2D;
 import flash.ui.Keyboard;
 import input.Input.GameButtons;
@@ -176,6 +177,13 @@ class GameplayState extends GameState {
         super.keyUpHandler(e);
         switch e.keyCode {
             case Keyboard.P : fsm.changeState(PAUSED);
+        }
+    }
+
+    override public function mouseDownHandler(e:MouseEvent):Void {
+        var trg:DisplayObject = e.target;
+        switch trg.name {
+            case "_pause": fsm.changeState(PAUSED);
         }
     }
 
