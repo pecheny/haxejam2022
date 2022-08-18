@@ -23,8 +23,9 @@
 *** [ ] прочекать совместимость звуков и платформ
 ** Feat
 *** [X] gameover ui cooldown
-*** [ ] dupe throw on up key
-*** [ ] start game with throw button only
+*** [X] dupe throw on up key
+*** [-] start game with throw button only
+*** [ ] pause screen / button
 *** ачивки
 ** Tuning
 *** размер чувака
@@ -32,12 +33,12 @@
 *** паттерны движения
 ** Art
 *** [ ] desire icons (?)
+**** small beach
 *** haxe logo
 *** ball
 *** main char and faces
 **** delight
 **** stress shake
 *** puddle anim
-*** small beach
 ** Gameplay
 *** core: stimulate and easy bounsing
