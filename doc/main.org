@@ -7,7 +7,7 @@
 - onscren
 *** Storage/ highscores
 *** msdf fonts
-*** [ ] focus handling
+*** [X] focus handling
 *** profiling / fps
 *** [X] crash/log backend
 *** [?] verion of the build in stats
@@ -25,7 +25,7 @@
 *** [X] gameover ui cooldown
 *** [X] dupe throw on up key
 *** [-] start game with throw button only
-*** [ ] pause screen / button
+*** [X] pause screen / button
 *** ачивки
 ** Tuning
 *** размер чувака

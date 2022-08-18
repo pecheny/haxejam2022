@@ -1,4 +1,5 @@
 package j2022;
+import utils.LostFocusHandler;
 import flash.ui.Keyboard;
 import input.GamepadInput;
 import input.Input;
@@ -25,6 +26,7 @@ class GodModel {
     public var stunEnd = 0;
     public var fWidth = 600;
     public var fHeight = 800;
+    public var focusHandler = new LostFocusHandler();
 
     public function new() {
         player = new Player();

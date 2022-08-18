@@ -167,9 +167,12 @@ class GameplayState extends GameState {
     override public function onEnter():Void {
         godModel = fsm.model;
         openfl.Lib.current.addChild(godModel.view);
+        godModel.focusHandler.onHide.listen(focusLost);
+
     }
 
     override public function onExit():Void {
+        godModel.focusHandler.onHide.remove(focusLost);
         openfl.Lib.current.removeChild(godModel.view);
     }
 
@@ -185,6 +188,9 @@ class GameplayState extends GameState {
         switch trg.name {
             case "_pause": fsm.changeState(PAUSED);
         }
+    }
+    function focusLost() {
+        fsm.changeState(PAUSED);
     }
 
 
