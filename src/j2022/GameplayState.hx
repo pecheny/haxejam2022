@@ -193,16 +193,18 @@ class PausedState extends GameState {
     }
 
     override public function onEnter():Void {
+        fsm.model.view.pause.gotoAndStop(2);
         openfl.Lib.current.addChild(fsm.model.view);
         fsm.model.sounds.pause();
     }
 
     override public function onExit():Void {
+        fsm.model.view.pause.gotoAndStop(1);
         openfl.Lib.current.removeChild(fsm.model.view);
         fsm.model.sounds.resume();
     }
 
     override public function mouseDownHandler(e:MouseEvent):Void {
-        super.mouseDownHandler(e);
+        fsm.changeState(GAMEPLAY);
     }
 }
