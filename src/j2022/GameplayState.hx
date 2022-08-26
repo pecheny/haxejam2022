@@ -160,8 +160,8 @@ class GameplayState extends GameState {
         var p = godModel.player;
         if (p.bullet != b) {throw "wrong";}
         p.bullet = null;
-        b.speed.x = p.speed.x * 2.4;
-        b.speed.y = -600;
+        b.speed.x = p.speed.x * 1.5;
+        b.speed.y = -300;
     }
 
     override public function onEnter():Void {

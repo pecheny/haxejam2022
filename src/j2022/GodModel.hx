@@ -16,7 +16,7 @@ class GodModel {
     public var bullet:Bullet;
     public var input:Input;
     public var baseline:Float;
-    public var gravity = 400;
+    public var gravity = 200;
     public var clouds:Clouds;
     public var cloudSpawner:CloudSpawners;
     public var distraction:Distraction;
@@ -322,13 +322,13 @@ class DesiresSpawner extends CloudSpawner {
     function getCooldown() {
         return
             if (GlobalTime.tick < 20 * 60)
-                Std.int(Math.random() * 5 * 60) ;
+                Std.int(Math.random() * 15 * 60) ;
             else
                 5 * 60;
     }
 
     override public function reset() {
-        nextSpawn = 60 * 15;
+        nextSpawn = 60 * 35;
     }
 }
 class DangerSpawner extends CloudSpawner {
@@ -372,11 +372,11 @@ class DangerSpawner extends CloudSpawner {
 
     function getCooldown() {
         return
-            15 * 60 + Std.int(Math.random() * 15 * 60) ;
+            25 * 60 + Std.int(Math.random() * 15 * 60) ;
     }
 
     override public function reset() {
-        nextSpawn = 60 * 50;
+        nextSpawn = 60 * 150;
     }
 }
 
