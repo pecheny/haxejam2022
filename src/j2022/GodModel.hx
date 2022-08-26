@@ -29,8 +29,8 @@ class GodModel {
     public var focusHandler = new LostFocusHandler();
 
     public function new() {
-        player = new Player();
-        bullet = new Bullet();
+        player = new Player(36);
+        bullet = new Bullet(12);
         clouds = new Clouds(this);
         cloudSpawner = new CloudSpawners(clouds);
         distraction = new Distraction(this);
@@ -418,19 +418,19 @@ class GlobalTime {
 
 
 class Bullet extends GameObj {
-    public function new() {
+    public function new(r) {
         super();
         color = 0x201010;
-        r = 8;
+        this.r = r;
     }
 }
 class Player extends GameObj {
     public var bullet:Bullet;
 
-    public function new() {
+    public function new(r) {
         super();
         color = 0xa0a0a0;
-        r = 24;
+        this.r = r;
     }
 }
 class GameObj {
