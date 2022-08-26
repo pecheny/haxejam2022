@@ -11,7 +11,7 @@ class Cloud extends FSM<CloudStates, Cloud> {
     public var view:CloudView;
     public var model:GodModel;
     public var pos = new Pos();
-    public var distraction = 2;
+    public var distraction(default, null):Int = 0;
     public var typeD = 2;
     public var type:DistractionType;
     public var r:Float = 36;
@@ -22,6 +22,12 @@ class Cloud extends FSM<CloudStates, Cloud> {
     public function reset(type) {
         r = 36;
         this.type = type;
+        distraction = switch type {
+            case Desire : 2;
+            case Fly : 1;
+            case Toilet: 10;
+            case Suicidal : 2;
+        }
     }
 
     public function new(m) {

@@ -358,7 +358,6 @@ class DangerSpawner extends CloudSpawner {
         var c = spawners.getCloud();
         c.reset(Toilet);
         c.r = 40;
-        c.distraction = 10;
 //        trace(vpoints[Math.floor(Math.random() * vpoints.length)]);
         c.pos.x = hpoints[Math.floor(Math.random() * hpoints.length)];
         c.pos.y = vpoints[Math.floor(Math.random() * vpoints.length)];
