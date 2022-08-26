@@ -8,6 +8,8 @@
 *** Storage/ highscores
 *** msdf fonts
 *** [X] focus handling
+https://developer.mozilla.org/en-US/docs/Web/API/Window/pagehide_event
+https://www.w3.org/TR/page-visibility/
 *** profiling / fps
 *** [X] crash/log backend
 *** [?] verion of the build in stats
